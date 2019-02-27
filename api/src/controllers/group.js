@@ -32,6 +32,9 @@ module.exports = {
     },
     async deleteGroup(req, res) {
         try {
+            // ! Работает удаление, но не работает обновление юзера
+            // await Group.remove({_id: req.body.id});
+            // await User.updateOne({_id: req.userData.id}, {$pull: {groups: req.body.id}});
             res.send({
                 message: 'Группа удаленна'
             })

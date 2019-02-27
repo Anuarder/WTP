@@ -10,11 +10,12 @@
                 <v-card>
                     <v-card-text>
                         <ol>
-                            <li v-for="(student, index) in group.students" :key="index">
+                            <li v-for="(student, index) in group.students" :key="index" class="pa-1">
                                 {{student.name}}
                             </li>
                         </ol>
                     </v-card-text>
+                    <v-btn color="error" @click="deleteGroup(group)" small>Удалить</v-btn>
                 </v-card>
                 </v-expansion-panel-content>
             </v-expansion-panel>
@@ -45,6 +46,21 @@ export default {
                     this.getGroups();
                 }
             }catch(err){
+                console.log(err);
+            }
+        },
+        async deleteGroup(group){
+            try{
+                let response = await TeacherServices.deleteGroup({
+                    id: group._id
+                });
+                if(response.data.message){
+                    console.log(response.data.message);
+                    this.getGroups();
+                }else{
+                    console.log("Error delete group");
+                }
+            }catch(err){    
                 console.log(err);
             }
         }
