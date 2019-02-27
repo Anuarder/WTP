@@ -3,12 +3,12 @@ import Vue from 'vue'
 import Router from 'vue-router'
 //? Auth
 import Login from '@/views/Auth/Login.vue'
+import Register from '@/views/Auth/Register.vue'
 //? Main
 import Main from '@/components/Main.vue'
 //! Modules
 import studentRouter from './Student/student_router'
 import teacherRouter from './Teacher/teacher_router'
-import adminRouter from './Admin/admin_router'
 
 //? Views
 import Settings from '@/views/Pages/Settings.vue'
@@ -24,17 +24,14 @@ const router = new Router({
             redirect:  () => {
                 switch(store.state.user.role){
                     case 'student': 
-                        return {name: 'courses'};
+                        return {name: 'studentStatistics'};
                     case 'teacher': 
-                        return {name: 'teacherCourses'};
-                    case 'admin':
-                        return {name: 'edit'}
+                        return {name: 'teacherStatistics'};
                 }
             },
             children:[
                 ...studentRouter,
                 ...teacherRouter,
-                ...adminRouter,
                 {
                     path: '/settings',
                     name: 'settings',
@@ -49,6 +46,11 @@ const router = new Router({
             path: '/login',
             name: 'login',
             component: Login
+        },
+        {
+            path: '/register',
+            name: 'register',
+            component: Register
         }
     ]
 })

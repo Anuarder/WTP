@@ -1,48 +1,21 @@
 import store from '@/store'
 
-import Courses from '@/views/Pages/Student/Courses'
-import Test from '@/views/Pages/Student/Test'
-import Tasks from '@/views/Pages/Student/Tasks'
-import Grade from '@/views/Pages/Student/Grade'
-import Chat from '@/views/Pages/Student/Chat'
+import StudentStatistics from '@/views/Pages/Student/StudentStatistics'
+import StudentTest from '@/views/Pages/Student/StudentTest'
 
 export default[
     {
-        path: '/courses',
-        name: 'courses',
-        component: Courses,
+        path: '/student-statistics',
+        name: 'studentStatistics',
+        component: StudentStatistics,
         beforeEnter(to, from, next){
             checkStudentRole(to, from, next)
         }
     },
     {
-        path: '/test',
-        name: 'test',
-        component: Test,
-        beforeEnter(to, from, next){
-            checkStudentRole(to, from, next)
-        }
-    },
-    {
-        path: '/tasks',
-        name: 'tasks',
-        component: Tasks,
-        beforeEnter(to, from, next){
-            checkStudentRole(to, from, next)
-        }
-    },
-    {
-        path: '/grade',
-        name: 'grade',
-        component: Grade,
-        beforeEnter(to, from, next){
-            checkStudentRole(to, from, next)
-        }
-    },
-    {
-        path: '/chat',
-        name: 'chat',
-        component: Chat,
+        path: '/student-test',
+        name: 'studentTest',
+        component: StudentTest,
         beforeEnter(to, from, next){
             checkStudentRole(to, from, next)
         }

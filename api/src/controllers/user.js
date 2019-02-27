@@ -4,6 +4,50 @@ const jwt = require("jsonwebtoken");
 const config = require('../config/config');
 
 module.exports = {
+    async registerUser(req, res) {
+        try {
+            // Check email for existence
+            let user = await User.findOne({
+                email: req.body.email
+            });
+            if (user) {
+                throw "Пользователь уже зарегистрирован"
+            } else {
+                let newUser;
+                if(req.body.role == 'student'){
+                    newUser = new User({
+                        name: req.body.name,
+                        role: req.body.role,
+                        email: req.body.email,
+                        password: req.body.password,
+                    });
+                }else{
+                    newUser = new User({
+                        name: req.body.name,
+                        role: req.body.role,
+                        email: req.body.email,
+                        password: req.body.password,
+                    });
+                }
+                // Hash password 
+                let salt = await bcrypt.genSalt(10);
+                let hash = await bcrypt.hash(newUser.password, salt);
+
+                newUser.password = hash;
+
+                // Save new user
+                await newUser.save();
+
+                res.send({
+                    message: "Register new User"
+                });
+            }
+        } catch (err) {
+            res.send({
+                error: err
+            });
+        }
+    },
     async loginUser(req, res) {
         try {
             let user = await User.findOne({

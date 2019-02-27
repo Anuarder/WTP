@@ -1,7 +1,7 @@
 <template>
     <v-content>
         <v-container>
-            TeacherTasks
+            Statistics
         </v-container>
     </v-content>
 </template>

@@ -2,7 +2,7 @@
     <v-content>
         <v-container>
             <div class="login-content">
-                <h1 class="text-xs-center display-1 font-weight-light top-text">Создать пользователя</h1>
+                <h1 class="text-xs-center display-1 font-weight-light top-text">Регистрация</h1>
                 <div class="login-form">
                     <v-form 
                         ref="registerForm"
@@ -16,14 +16,6 @@
                             color="#fd5b4d"
                             dismissible>
                             {{error_message}}
-                        </v-alert>
-                        <v-alert
-                            v-model="successAlert"
-                            outline
-                            class="error-alert mb-3"
-                            color="success"
-                            dismissible>
-                            {{success_message}}
                         </v-alert>
                         <v-text-field
                             solo
@@ -76,7 +68,7 @@
                             class="elevation-8 text-none auth-btn ml-3"
                             right
                             :loading="performingRequest">
-                            Создать
+                            Зарегистрироваться
                         </v-btn>
                     </v-form>
                 </div>
@@ -85,18 +77,14 @@
     </v-content>
 </template>
 <script>
-import Admin from '@/services/Admin'
+import Auth from '@/services/Auth'
 export default {
 	data() {
 		return {
 			valid: true,
 			showPassword: false,
-			image: '',
 			username: '',
-			roles: [{
-					text: 'Администратор',
-					role: 'admin'
-				},
+			roles: [
 				{
 					text: 'Преподаватель',
 					role: 'teacher'
@@ -126,8 +114,6 @@ export default {
 			],
 			error_message: '',
 			errorAlert: false,
-			success_message: '',
-			successAlert: false,
 			performingRequest: false,
 			role: 'student'
 		}
@@ -142,24 +128,17 @@ export default {
 				console.log("validate");
 			}
 		},
-		goLink(link) {
-			this.$router.push({
-				name: link
-			});
-		},
 		async register() {
 			try {
-				const response = await Admin.createUser({
+				const response = await Auth.register({
 					name: this.username,
 					email: this.email,
 					role: this.role,
-					image: this.image,
 					password: this.password,
 				});
 				if (response.data.message) {
 					this.performingRequest = false;
-					this.success_message = "Пользователь создан";
-					this.successAlert = true;
+					this.$router.push('/login');
 				} else {
 					this.performingRequest = false;
 					this.errorAlert = true;

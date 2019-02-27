@@ -73,26 +73,13 @@ export default {
         checkRole(){
             if(this.user.role == 'student'){
                 this.menu = [
-                    { icon: 'school', name: 'Дисциплины', path: 'courses' },
-                    { icon: 'question_answer', name: 'Тестирование', path: 'test' },
-                    { icon: 'drafts', name: 'Задания', path: 'tasks' },
-                    { icon: 'poll', name: 'Оценки', path: 'grade' },
-                    { icon: 'chat', name: 'Чат', path: 'chat' },
+                    { icon: 'assessment', name: 'Статистика', path: 'studentStatistics' },
+                    { icon: 'question_answer', name: 'Тестирование', path: 'studentTest' },
                 ]
             }else if(this.user.role == 'teacher'){
                 this.menu = [
-                    { icon: 'school', name: 'Дисциплины', path: 'teacherCourses' },
+                    { icon: 'assessment', name: 'Статистика', path: 'teacherStatistics' },
                     { icon: 'question_answer', name: 'Провести тестирование', path: 'teacherTest' },
-                    { icon: 'drafts', name: 'Задания', path: 'teacherTasks' },
-                    { icon: 'poll', name: 'Оценки', path: 'teacherGrade' },
-                    { icon: 'chat', name: 'Чат', path: 'teacherChat' },
-                ]
-            }else{
-                this.menu = [
-                    { icon: 'save', name: 'Редактировать', path: 'edit' },
-                    { icon: 'person', name: 'Создать пользователя', path: 'createUser' },
-                    { icon: 'people', name: 'Создать группу', path: 'createGroup' },
-                    { icon: 'school', name: 'Создать дисциплину', path: 'createCourse' },
                 ]
             }
         },

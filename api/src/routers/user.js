@@ -4,6 +4,7 @@ const router = express.Router();
 const checkAuth = require('../config/checkAuth');
 
 //* All users
+router.post('/register', UserControllers.registerUser);
 router.post('/login', UserControllers.loginUser);
 router.put('/changePassword', checkAuth, UserControllers.changePassword);
 

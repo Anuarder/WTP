@@ -1,16 +1,13 @@
 import store from '@/store'
 
-import TeacherCourses from '@/views/Pages/Teacher/TeacherCourses'
+import TeacherStatistics from '@/views/Pages/Teacher/TeacherStatistics'
 import TeacherTest from '@/views/Pages/Teacher/TeacherTest'
-import TeacherTasks from '@/views/Pages/Teacher/TeacherTasks'
-import TeacherGrade from '@/views/Pages/Teacher/TeacherGrade'
-import TeacherChat from '@/views/Pages/Teacher/TeacherChat'
 
 export default [
     {
-        path: '/teacher-courses',
-        name: 'teacherCourses',
-        component: TeacherCourses,
+        path: '/teacher-statistics',
+        name: 'teacherStatistics',
+        component: TeacherStatistics,
         beforeEnter(to, from, next){
             checkTeacherRole(to, from, next)
         }
@@ -19,30 +16,6 @@ export default [
         path: '/teacher-test',
         name: 'teacherTest',
         component: TeacherTest,
-        beforeEnter(to, from, next){
-            checkTeacherRole(to, from, next)
-        }
-    },
-    {
-        path: '/teacher-tasks',
-        name: 'teacherTasks',
-        component: TeacherTasks,
-        beforeEnter(to, from, next){
-            checkTeacherRole(to, from, next)
-        }
-    },
-    {
-        path: '/teacher-grade',
-        name: 'teacherGrade',
-        component: TeacherGrade,
-        beforeEnter(to, from, next){
-            checkTeacherRole(to, from, next)
-        }
-    },
-    {
-        path: '/teacher-chat',
-        name: 'teacherChat',
-        component: TeacherChat,
         beforeEnter(to, from, next){
             checkTeacherRole(to, from, next)
         }
