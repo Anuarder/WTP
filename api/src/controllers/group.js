@@ -18,7 +18,7 @@ module.exports = {
 
                 let saveGroup = await newGroup.save();
                 
-                await User.update({_id: req.userData.id}, {$addToSet: {groups: {name: saveGroup.name, id: saveGroup._id}}});
+                await User.update({_id: req.userData.id}, {$addToSet: {groups: saveGroup._id}});
 
                 res.send({
                     message: "Register new Group",
@@ -73,11 +73,7 @@ module.exports = {
     async getGroups(req, res){
         try{
             let teacher = await User.findOne({_id: req.userData.id});
-            let groups = [];
-            for(item of teacher.groups){
-                let group = await Group.findOne({_id: item.id});
-                groups.push(group);
-            }
+            let groups = await Group.find({_id: {$in: teacher.groups}});
             res.send({
                 groups: groups
             });
