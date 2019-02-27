@@ -9,7 +9,7 @@ const app = express();
 
 //Router initialize
 const userRouter = require('./routers/user');
-
+const groupRouter = require('./routers/group');
 //Helpers
 app.use(morgan('combined'));
 app.use(cors());
@@ -17,6 +17,7 @@ app.use(bodyParser.json());
 
 // Routers
 app.use(userRouter);
+app.use(groupRouter);
 
 // Start server
 mongoose.connect(config.database_url, {useNewUrlParser: true}, (err) => {

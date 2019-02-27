@@ -7,28 +7,20 @@ module.exports = {
     async registerUser(req, res) {
         try {
             // Check email for existence
-            let user = await User.findOne({
+            let user = await User.findOne({ 
                 email: req.body.email
             });
             if (user) {
                 throw "Пользователь уже зарегистрирован"
             } else {
-                let newUser;
-                if(req.body.role == 'student'){
-                    newUser = new User({
-                        name: req.body.name,
-                        role: req.body.role,
-                        email: req.body.email,
-                        password: req.body.password,
-                    });
-                }else{
-                    newUser = new User({
-                        name: req.body.name,
-                        role: req.body.role,
-                        email: req.body.email,
-                        password: req.body.password,
-                    });
-                }
+                let newUser = new User({
+                    name: req.body.name,
+                    role: req.body.role,
+                    email: req.body.email,
+                    password: req.body.password,
+                    groups: [],
+                    tests: []
+                });
                 // Hash password 
                 let salt = await bcrypt.genSalt(10);
                 let hash = await bcrypt.hash(newUser.password, salt);
@@ -39,7 +31,7 @@ module.exports = {
                 await newUser.save();
 
                 res.send({
-                    message: "Register new User"
+                    message: "Register new User" 
                 });
             }
         } catch (err) {
@@ -65,29 +57,18 @@ module.exports = {
                         config.secret, {
                             expiresIn: '7d'
                         });
-
-                    if (user.role == 'student') {
-                        return res.send({
-                            user: {
-                                name: user.name,
-                                email: user.email,
-                                role: user.role,
-                                id: user._id,
-                                group: user.group
-                            },
-                            token: token
-                        });
-                    } else {
-                        return res.send({
-                            user: {
-                                name: user.name,
-                                email: user.email,
-                                role: user.role,
-                                id: user._id,
-                            },
-                            token: token
-                        });
-                    }
+                    
+                    return res.send({
+                        user: {
+                            name: user.name,
+                            email: user.email,
+                            role: user.role,
+                            id: user._id,
+                            groups: user.groups,
+                            tests: user.tests
+                        },
+                        token: token
+                    });
                 }
             } else {
                 throw "Пользователь не найден"

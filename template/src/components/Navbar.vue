@@ -80,6 +80,7 @@ export default {
                 this.menu = [
                     { icon: 'assessment', name: 'Статистика', path: 'teacherStatistics' },
                     { icon: 'question_answer', name: 'Провести тестирование', path: 'teacherTest' },
+                    { icon: 'people', name: 'Создать группу', path: 'teacherCreateGroup' },
                 ]
             }
         },
