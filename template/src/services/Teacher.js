@@ -6,5 +6,8 @@ export default {
     },
     getStudents(){
         return Api().get('getStudents');
+    },
+    getGroups(){
+        return Api().get('getGroups');
     }
 }

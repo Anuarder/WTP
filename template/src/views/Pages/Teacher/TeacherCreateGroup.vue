@@ -89,22 +89,23 @@ export default {
 			try {
 				const response = await TeacherServices.createGroup({
 					name: this.name,
-					students: this.students,
+					students: this.students
 				});
 				if (response.data.message) {
 					this.performingRequest = false;
 					this.success_message = 'Группа созданна';
 					this.succesAlert = true;
+					console.log(response)
 					setTimeout(() => {
 						this.succesAlert = false;
-					}, 2000);
+					}, 1000);
 				} else {
 					this.performingRequest = false;
 					this.error_message = response.data.error;
 					this.errorAlert = true;
 					setTimeout(() => {
 						this.errorAlert = false;
-					}, 2000);
+					}, 1000);
 				}
 			} catch (error) {
 				console.log(error);

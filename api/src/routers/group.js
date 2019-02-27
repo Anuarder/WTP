@@ -5,6 +5,7 @@ const checkAuth = require('../config/checkAuth');
 router.post('/createGroup', checkAuth, GroupControllers.createGroup);
 router.post('/deleteGroup', checkAuth, GroupControllers.deleteGroup);
 
-router.get('/getStudents',  GroupControllers.getStudents);
+router.get('/getGroups', checkAuth, GroupControllers.getGroups);
+router.get('/getStudents', checkAuth,  GroupControllers.getStudents);
 
 module.exports = router;
