@@ -32,16 +32,16 @@ module.exports = {
     },
     async deleteGroup(req, res) {
         try {
-            // ! Работает удаление, но не работает обновление юзера
-            // await Group.remove({_id: req.body.id});
-            // await User.updateOne({_id: req.userData.id}, {$pull: {groups: req.body.id}});
+            await Group.remove({_id: req.body.id});
+            await User.updateOne({ _id: req.userData.id }, {$pull: { groups: req.body.id }});
             res.send({
-                message: 'Группа удаленна'
+                message: "Группа удаленна"
             })
         } catch (err) {
             res.send({
                 error: err
             });
+            console.log(err);
         }
     },
     async getStudents(req, res) {

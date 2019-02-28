@@ -40,7 +40,6 @@ export default {
                 if(response.data.groups){
                     console.log("succes getGroups");
                     this.groups = response.data.groups;
-                    console.log(this.groups);
                 }else{
                     console.log("Error getGroups");
                     this.getGroups();
