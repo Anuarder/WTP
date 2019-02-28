@@ -2,6 +2,7 @@ import store from '@/store'
 
 import TeacherStatistics from '@/views/Pages/Teacher/TeacherStatistics'
 import TeacherTest from '@/views/Pages/Teacher/TeacherTest'
+import TeacherCreateTest from '@/views/Pages/Teacher/TeacherCreateTest'
 import TeacherCreateGroup from '@/views/Pages/Teacher/TeacherCreateGroup'
 import TeacherGroups from '@/views/Pages/Teacher/TeacherGroups'
 
@@ -18,6 +19,14 @@ export default [
         path: '/teacher-test',
         name: 'teacherTest',
         component: TeacherTest,
+        beforeEnter(to, from, next){
+            checkTeacherRole(to, from, next)
+        }
+    },
+    {
+        path: '/teacher-create-test',
+        name: 'teacherCreateTest',
+        component: TeacherCreateTest,
         beforeEnter(to, from, next){
             checkTeacherRole(to, from, next)
         }

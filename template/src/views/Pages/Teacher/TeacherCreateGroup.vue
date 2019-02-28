@@ -2,7 +2,7 @@
   <v-content>
     <v-container>
       <div class="login-content">
-        <h1 class="text-xs-center display-1 font-weight-light top-text">Создать группу</h1>
+        <h1 class="text-xs-center display-1 font-weight-light top-text">Добавить группу</h1>
         <div class="login-form">
           <v-form ref="registerForm" @submit.prevent v-model="valid" class="mt-3 mb-3">
             <v-alert
@@ -31,6 +31,7 @@
               :items="allStudents"
               label="Выберите студентов"
               solo
+							color="teal"
               :rules="[v => !!v || 'Обязательное поле']"
               item-text="name"
               item-value="id"
@@ -41,7 +42,7 @@
             ></v-select>
             <v-btn
               @click="validate()"
-              color
+              color="teal"
               dark
               type="submit"
               class="elevation-8 text-none auth-btn ml-3"
@@ -89,16 +90,15 @@ export default {
 			try {
 				const response = await TeacherServices.createGroup({
 					name: this.name,
-					students: this.students
+					students: this.students,
 				});
 				if (response.data.message) {
 					this.performingRequest = false;
 					this.success_message = 'Группа созданна';
 					this.succesAlert = true;
-					console.log(response)
 					setTimeout(() => {
 						this.succesAlert = false;
-					}, 1000);
+					}, 800);
 				} else {
 					this.performingRequest = false;
 					this.error_message = response.data.error;

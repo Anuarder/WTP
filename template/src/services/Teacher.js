@@ -13,4 +13,7 @@ export default {
     getGroups(){
         return Api().get('getGroups');
     },
+    createTest(value){
+        return Api().post('createTest', value);
+    }
 }
