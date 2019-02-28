@@ -8,7 +8,7 @@ const userSchema = new Schema(
         email: String,
         password: String,
         groups: [String],
-        tests: [String]
+        tests: [String],
     },
     {
         collection: 'Users'

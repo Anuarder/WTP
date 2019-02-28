@@ -5,32 +5,25 @@ const Test = require("../models/Test");
 module.exports = {
     async createTest(req, res) {
         try {
-            let test = await Test.find({ name: req.body.name });
+            let test = await Test.findOne({ name: req.body.name });
             if (test) {
-                res.send({
-                    error: "Тест уже создан"
-                });
+                throw "Тест уже создан";
             } else {
                 let newTest = new Test({
                     name: req.body.name,
                     questions: req.body.questions,
                     time: req.body.time,
-                    result: [],
+                    results: {
+                        pass: 0,
+                        flooded: 0
+                    },
                     groups: []
                 });
-
-                if (req.body.groups.lenght !== 0) {
-                    newTest.groups = req.body.groups;
-                }
-
                 let saveTest = await newTest.save();
-
-                if (newTest.groups !== 0) {
-                    await Group.update(
-                        { _id: { $in: newTest.groups } },
-                        { $addToSet: { tests: saveTest._id } }
-                    );
-                }
+                await User.update(
+                    { _id: req.userData.id },
+                    { $addToSet: { tests: saveTest._id } }
+                );
                 res.send({
                     message: "Тест создан"
                 });
@@ -43,13 +36,61 @@ module.exports = {
     },
     async deleteTest(req, res) {
         try {
+            let test = await Test.findOne({_id: req.body.id});
+            await Test.remove({ _id: req.body.id });
+            await User.updateOne(
+                { _id: req.userData.id },
+                { $pull: { tests: req.body.id } }
+            );
+            await Group.updateMany({_id: {$in: test.groups}}, {$pull: {tests: req.body.id}});
+
+            test.remove({_id: req.body.id});
             res.send({
-                message: "Группа удаленна"
+                message: "Тест удален"
             });
         } catch (err) {
             res.send({
                 error: err
             });
+            console.log(err)
+        }
+    },
+    async getTests(req, res) {
+        try {
+            let teacher = await User.findOne({ _id: req.userData.id });
+
+            let tests = await Test.find({ _id: { $in: teacher.tests } });
+
+            res.send({
+                tests: tests
+            });
+        } catch (err) {
+            res.send({
+                error: err
+            });
+        }
+    },
+    async sendTest(req, res) {
+        try {
+            let test = await Test.updateOne(
+                { _id: req.body.id },
+                { $addToSet: { groups: req.body.groups  } }
+            );
+            let group = await Group.updateMany(
+                { _id: { $in: req.body.groups } },
+                { $addToSet: { tests: req.body.id } }
+            );
+            console.log(test);
+            console.log(group);
+            res.send({
+                message: "Тест отправлен"
+            });
+            console.log("All ok");
+        } catch (err) {
+            res.send({
+                error: err
+            });
+            console.log(err);
         }
     }
 };

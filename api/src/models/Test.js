@@ -5,7 +5,10 @@ const testSchema = new Schema(
     {
         name: String,
         questions: Array,
-        results: Array,
+        results: {
+            type: Map,
+            of: Number
+        },
         groups: [String],
         time: Number
     },

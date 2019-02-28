@@ -15,5 +15,14 @@ export default {
     },
     createTest(value){
         return Api().post('createTest', value);
+    },
+    deleteTest(value){
+        return Api().post('deleteTest', value);
+    },
+    getTests(){
+        return Api().get('getTests');
+    },
+    sendTest(value){
+        return Api().post('sendTest', value);
     }
 }

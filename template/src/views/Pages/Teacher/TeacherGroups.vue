@@ -4,7 +4,7 @@
       <v-expansion-panel>
         <v-expansion-panel-content v-for="(group, index) in groups" :key="index">
           <v-icon slot="actions" color="teal">keyboard_arrow_down</v-icon>
-          <div slot="header">{{group.name}}</div>
+          <div slot="header" class="font-weight-medium">{{group.name}}</div>
           <v-card>
             <v-card-text>
               <ol>

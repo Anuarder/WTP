@@ -21,60 +21,59 @@
             >{{success_message}}</v-alert>
             <!-- CODE -->
             <v-text-field
-                label="Заголовок"
-                solo
-                class="login-input"
-                :rules="nameRules"
-                v-model="name"
-                required
+              label="Заголовок"
+              solo
+              class="login-input"
+              :rules="nameRules"
+              v-model="name"
+              required
             ></v-text-field>
             <v-text-field
-                label="Время"
-                solo
-                class="login-input"
-                :rules="timeRules"
-                v-model="time"
-                required
-                type="number"
-                hint="Время для прохождения теста в минутах"
+              label="Время"
+              solo
+              class="login-input"
+              :rules="timeRules"
+              v-model="time"
+              required
+              type="number"
+              hint="Время для прохождения теста в минутах"
             ></v-text-field>
-            <hr class="mb-3">
             <h2 class="mb-3">Вопросы</h2>
-            <div v-for="(question, i) in questions" :key="i">
-                <h3 class="mb-2 font-weight-medium">
-                    Вопрос {{i+1}} 
-                    <v-btn 
-                        icon
-                        color="error" 
-                        small 
-                        @click="deleteQuestion(i)"
-                    ><v-icon>delete</v-icon></v-btn> 
-                </h3> 
-                <v-text-field
-                    :label="`${i+1} вопрос`"
-                    solo
-                    v-model="question.question"
-                ></v-text-field>
-                <div v-for="(answer, j) in question.answers" :key="j">
-                    <v-text-field
+            <v-expansion-panel>
+              <v-expansion-panel-content v-for="(question, i) in questions" :key="i">
+                <v-icon slot="actions" color="teal">keyboard_arrow_down</v-icon>
+                <div slot="header" class="font-weight-medium">
+                  Вопрос {{i+1}}
+                  <v-btn icon small @click="deleteQuestion(i)">
+                    <v-icon color="grey">delete</v-icon>
+                  </v-btn>
+                </div>
+                <v-card color="blue-grey lighten-5">
+                  <v-card-text>
+                    <v-text-field :label="`${i+1} вопрос`" solo v-model="question.question"></v-text-field>
+                    <div v-for="(answer, j) in question.answers" :key="j">
+                      <v-text-field
                         :prepend-icon="answer.isAnswer ? 'check_circle' : 'highlight_off'"
                         :label="`${j+1} ответ`"
                         append-icon="delete"
                         solo
+                        v-model="answer.answer"
                         @click:prepend="answer.isAnswer = !answer.isAnswer"
                         @click:append="deleteAnswer(i, j)"
-                    ></v-text-field>
-                </div>
-                <v-btn small color="primary" @click="addAnswer(i)">Добавить ответ</v-btn>
-            </div>
-            <v-btn 
-                class="text-none mt-3"
-                color="teal"
-                dark
-                @click="addQuestion"
-            ><v-icon left>note_add</v-icon> Добавить вопрос</v-btn>
+                      ></v-text-field>
+                    </div>
+                    <v-btn small color="primary" @click="addAnswer(i)">Добавить ответ</v-btn>
+                  </v-card-text>
+                </v-card>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+            <v-btn class="text-none mt-3" color="teal" dark @click="addQuestion">
+              <v-icon left>note_add</v-icon>Добавить вопрос
+            </v-btn>
           </v-form>
         </div>
+        <hr class="mb-3">
+        <v-btn dark @click="createTest">Добавить тест</v-btn>
       </div>
     </v-container>
   </v-content>
@@ -85,16 +84,16 @@ export default {
 	data() {
 		return {
 			valid: true,
-            name: '',
-            nameRules: [v => !!v || 'Обязательное поле'],
-            time: '',
-            timeRules: [v => !!v || 'Время для прохождения теста в минутах'],
-            questions: [],
+			name: '',
+			nameRules: [v => !!v || 'Обязательное поле'],
+			time: '',
+			timeRules: [v => !!v || 'Время для прохождения теста в минутах'],
+			questions: [],
 			error_message: '',
 			errorAlert: false,
 			success_message: '',
 			succesAlert: false,
-            performingRequest: false,
+			performingRequest: false,
 		};
 	},
 	methods: {
@@ -102,7 +101,7 @@ export default {
 			if (this.$refs.registerForm.validate()) {
 				event.preventDefault();
 				this.performingRequest = true;
-				// this.createTest();
+				this.createTest();
 				this.performingRequest = false;
 			} else {
 				console.log('validate');
@@ -112,9 +111,9 @@ export default {
 			try {
 				const response = await TeacherServices.createTest({
 					name: this.name,
-                    questions: this.questions,
-                    groups: this.groups,
-                    time: this.time
+					questions: this.questions,
+					groups: this.groups,
+					time: this.time,
 				});
 				if (response.data.message) {
 					this.performingRequest = false;
@@ -134,30 +133,30 @@ export default {
 			} catch (error) {
 				console.log(error);
 			}
-        },
-        addQuestion(){
-            this.questions.push({
-                question: '',
-                answers:[
-                    {
-                        answer: '',
-                        isAnswer: false
-                    }
-                ]
-            });
-        },
-        deleteQuestion(item){
-            this.questions.splice(item, 1);
-        },  
-        addAnswer(item){
-            this.questions[item].answers.push({
-                answer: '',
-                isAnswer: false
-            });
-        },
-        deleteAnswer(item, answer){
-            this.questions[item].answers.splice(answer, 1);
-        }
+		},
+		addQuestion() {
+			this.questions.push({
+				question: '',
+				answers: [
+					{
+						answer: '',
+						isAnswer: false,
+					},
+				],
+			});
+		},
+		deleteQuestion(item) {
+			this.questions.splice(item, 1);
+		},
+		addAnswer(item) {
+			this.questions[item].answers.push({
+				answer: '',
+				isAnswer: false,
+			});
+		},
+		deleteAnswer(item, answer) {
+			this.questions[item].answers.splice(answer, 1);
+		},
 	},
 };
 </script>
