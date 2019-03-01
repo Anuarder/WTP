@@ -14,7 +14,7 @@
             </v-card-title>
 
             <v-card-actions>
-                <v-btn dark color="teal">Пройти тест</v-btn>
+                <v-btn dark color="teal" @click="passTest(test)">Пройти тест</v-btn>
             </v-card-actions>
           </v-card>
         </v-flex>
@@ -47,6 +47,10 @@ export default {
             }catch(err){
                 console.log(err);
             }
+        },
+        passTest(test){
+            //TODO: Тест проверяется и проходится на фронте и отправляется только результат
+            
         }
     }
 }
