@@ -12,7 +12,6 @@
                 <div class="red--text" v-else>Не пройден</div>
               </div>
             </v-card-title>
-
             <v-card-actions>
                 <v-btn dark color="teal" @click="passTest(test)">Пройти тест</v-btn>
             </v-card-actions>
@@ -50,7 +49,6 @@ export default {
         },
         passTest(test){
             //TODO: Тест проверяется и проходится на фронте и отправляется только результат
-            
         }
     }
 }
