@@ -13,7 +13,7 @@
             </v-card-title>
 
             <v-card-actions>
-              <v-dialog v-model="dialog" persistent  max-width="300">
+              <v-dialog v-model="dialog" persistent max-width="300">
                 <v-card>
                   <v-card-title class="headline">Выберите группы</v-card-title>
                   <v-card-text>
@@ -91,7 +91,7 @@ export default {
 					groups: this.groups,
 				});
 				console.log(reponse.data.message);
-				this.dialog = false
+				this.dialog = false;
 			} catch (err) {
 				console.log(err);
 			}

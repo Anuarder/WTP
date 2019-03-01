@@ -36,15 +36,18 @@ module.exports = {
     },
     async deleteTest(req, res) {
         try {
-            let test = await Test.findOne({_id: req.body.id});
+            let test = await Test.findOne({ _id: req.body.id });
             await Test.remove({ _id: req.body.id });
             await User.updateOne(
                 { _id: req.userData.id },
                 { $pull: { tests: req.body.id } }
             );
-            await Group.updateMany({_id: {$in: test.groups}}, {$pull: {tests: req.body.id}});
+            await Group.updateMany(
+                { _id: { $in: test.groups } },
+                { $pull: { tests: req.body.id } }
+            );
 
-            test.remove({_id: req.body.id});
+            test.remove({ _id: req.body.id });
             res.send({
                 message: "Тест удален"
             });
@@ -52,7 +55,7 @@ module.exports = {
             res.send({
                 error: err
             });
-            console.log(err)
+            console.log(err);
         }
     },
     async getTests(req, res) {
@@ -74,7 +77,7 @@ module.exports = {
         try {
             let test = await Test.updateOne(
                 { _id: req.body.id },
-                { $addToSet: { groups: req.body.groups  } }
+                { $addToSet: { groups: req.body.groups } }
             );
             let group = await Group.updateMany(
                 { _id: { $in: req.body.groups } },
@@ -85,10 +88,56 @@ module.exports = {
             res.send({
                 message: "Тест отправлен"
             });
-            console.log("All ok");
         } catch (err) {
             res.send({
                 error: err
+            });
+            console.log(err);
+        }
+    },
+    async getStudentTests(req, res) {
+        try {
+            let student = await User.findOne({_id: req.userData.id});
+            let groups = await Group.aggregate([
+                { $match: { "students.id": req.userData.id } }
+            ]);
+            let stundentTestsID = [];
+            for(group of groups){
+                for(test of group.tests){
+                    stundentTestsID.push(test);
+                }
+            }
+            let tests = await Test.find({_id: {$in: stundentTestsID}});
+            let filterTests = [];
+            for(test of tests){
+                if(student.tests.length !== 0){
+                    for(pass of student.tests){
+                        if(test._id == pass){
+                            filterTests.push({
+                                test: test,
+                                isPassed: true
+                            });
+                        }else{
+                            filterTests.push({
+                                test: test,
+                                isPassed: false
+                            });
+                        }
+                    }
+                }else{
+                    filterTests.push({
+                        test: test,
+                        isPassed: false
+                    })
+                }
+            }
+
+            res.send({
+                tests: filterTests
+            });
+        } catch (err) {
+            res.status(400).send({
+                error: "Students test get error"
             });
             console.log(err);
         }

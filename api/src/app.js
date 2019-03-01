@@ -11,7 +11,6 @@ const app = express();
 const userRouter = require("./routers/user");
 const groupRouter = require("./routers/group");
 const testRouter = require('./routers/test');
-
 //Helpers
 app.use(morgan("combined"));
 app.use(cors());
