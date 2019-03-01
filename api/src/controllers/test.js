@@ -98,6 +98,7 @@ module.exports = {
     },
     async getStudentTests(req, res) {
         try {
+            // TODO: Получение пройденных, но удаленных для студента тестов
             let student = await User.findOne({ _id: req.userData.id });
             let groups = await Group.aggregate([
                 { $match: { "students.id": req.userData.id } }
