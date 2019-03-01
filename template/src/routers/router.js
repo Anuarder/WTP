@@ -22,11 +22,15 @@ const router = new Router({
 			name: 'home',
 			component: Main,
 			redirect: () => {
-				switch (store.state.user.role) {
-					case 'student':
-						return {name: 'studentStatistics'};
-					case 'teacher':
-						return {name: 'teacherStatistics'};
+				if(store.state.user){
+					switch (store.state.user.role) {
+						case 'student':
+							return {name: 'studentStatistics'};
+						case 'teacher':
+							return {name: 'teacherStatistics'};
+					}
+				}else{
+					return {name: 'login'};
 				}
 			},
 			children: [
