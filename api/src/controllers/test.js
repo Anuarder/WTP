@@ -36,6 +36,7 @@ module.exports = {
     },
     async deleteTest(req, res) {
         try {
+            //TODO: Нужно чтоб у ученика тоже удалялся, или хранился отдельно с результатами и тд
             let test = await Test.findOne({ _id: req.body.id });
             await Test.remove({ _id: req.body.id });
             await User.updateOne(
@@ -97,38 +98,38 @@ module.exports = {
     },
     async getStudentTests(req, res) {
         try {
-            let student = await User.findOne({_id: req.userData.id});
+            let student = await User.findOne({ _id: req.userData.id });
             let groups = await Group.aggregate([
                 { $match: { "students.id": req.userData.id } }
             ]);
             let stundentTestsID = [];
-            for(group of groups){
-                for(test of group.tests){
+            for (group of groups) {
+                for (test of group.tests) {
                     stundentTestsID.push(test);
                 }
             }
-            let tests = await Test.find({_id: {$in: stundentTestsID}});
+            let tests = await Test.find({ _id: { $in: stundentTestsID } });
             let filterTests = [];
-            for(test of tests){
-                if(student.tests.length !== 0){
-                    for(pass of student.tests){
-                        if(test._id == pass){
+            for (test of tests) {
+                if (student.tests.length !== 0) {
+                    for (pass of student.tests) {
+                        if (test._id == pass) {
                             filterTests.push({
                                 test: test,
                                 isPassed: true
                             });
-                        }else{
+                        } else {
                             filterTests.push({
                                 test: test,
                                 isPassed: false
                             });
                         }
                     }
-                }else{
+                } else {
                     filterTests.push({
                         test: test,
                         isPassed: false
-                    })
+                    });
                 }
             }
 
