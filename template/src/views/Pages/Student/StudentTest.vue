@@ -23,6 +23,8 @@
       <v-card>
         <v-card-title class="headline blue-grey darken-1" primary-title>
           <span class="white--text">{{currentTest.name}}</span>
+          <v-spacer></v-spacer>
+          <v-btn flat dark>{{currentTime}} минут</v-btn>
         </v-card-title>
         <v-card-text>
           <!--
@@ -38,10 +40,10 @@
                   <v-list-tile avatar v-for="(answer, j) in question.answers" :key="j">
                     <v-list-tile-title @click="addAnswer(i, j)" class="answer">
                       {{j+1}}) {{answer.answer}}
-                      <!--//!Работает только если начинать с первого вопроса и по порядку 
+                      <!-- //!Работает только если начинать с первого вопроса и по порядку  -->
                       <span v-if="answers[i]">
                         <v-icon v-if="j == answers[i].answer" color="teal">check_circle</v-icon>
-                      </span>-->
+                      </span>
                     </v-list-tile-title>
                   </v-list-tile>
                 </v-list>
@@ -68,6 +70,7 @@ export default {
 			tests: [],
 			dialog: false,
 			currentTest: [],
+			currentTime: 0,
 			answers: [], //! Отправляется вопрос и ответ на него. {question: '', answer: ''}
 			time: 0,
 		};
@@ -111,42 +114,69 @@ export default {
 					return 0;
 				}
 			});
-			console.log(this.answers);
 		},
 		openTestDialog(test) {
 			this.dialog = true;
 			this.currentTest = test.test;
-			this.time = test.test.time; // Время для сдачи теста
-			console.log(this.answers);
+			this.currentTime = test.test.time;
+			//TODO: Завершение работы при конце времени, неотвеченные вопросы записываются в incorrect и результат уходит на сервер
+			setTimeout(() => {
+				this.timeOver();
+			}, this.currentTime * 100);
+			//TODO: Логика работы обратного счетчика, каждую секунду обновлять currentTime
 		},
 		cancelTestPass() {
-			//TODO: Отмена счетчика времени и ответов на тест
 			this.dialog = false;
-			this.answers = [];
+			this.currentTest = [];
+			this.currentTime = 0;
+			this.time = 0;
+		},
+		timeOver() {
+			console.log('Время потраченно');
 		},
 		passTest() {
-			//TODO: Тест проверяется и проходится на фронте и отправляется только результат
-			let correct = [];
-			let incorrect = [];
-            
-			let currentTestQuestions = this.currentTest.questions;
-			for (let i = 0; i < currentTestQuestions.length; i++) {
-                // Проверка ответа
-                let answer = currentTestQuestions[i].answers[this.answers[i].answer].isAnswer
-                if(answer){
-                    correct.push(this.answers[i])
-                }else{
-                    incorrect.push(this.answers[i])
-                }
-            }
-            console.log(correct);
-            console.log(incorrect);
-            console.log({
-                result: {
-                    correct: correct.length,
-                    incorrect: incorrect.length
-                }
-            });
+			//* TODO: Тест проверяется и проходится на фронте и отправляется только результат
+			//TODO: Проверка теста, показ ошибок и ответов
+            //TODO: Выделение выбранного ответа и выделение при проверка правильных и неправельных ответов
+            //TODO: При прохождении теста, запись что тест уже пройден
+			if (this.currentTest.questions.length !== this.answers.length) {
+				alert('Вы ответили не на все вопросы');
+			} else {
+				let correct = [];
+				let incorrect = [];
+
+				let currentTestQuestions = this.currentTest.questions;
+				for (let i = 0; i < currentTestQuestions.length; i++) {
+					// Проверка ответа
+					let answer =
+						currentTestQuestions[i].answers[this.answers[i].answer].isAnswer;
+					if (answer) {
+						correct.push(this.answers[i]);
+					} else {
+						incorrect.push(this.answers[i]);
+					}
+				}
+
+				console.log('Correct');
+				console.log(correct);
+				console.log('Incorrect');
+				console.log(incorrect);
+
+				//? Вывод и запись результатов в бд
+				console.log({
+					result: {
+						correct: correct.length,
+						incorrect: incorrect.length,
+						time: this.currentTime,
+					},
+				});
+
+				//? Завершение теста
+				this.dialog = false;
+				this.currentTest = [];
+				this.currentTime = 0;
+				this.time = 0;
+			}
 		},
 	},
 };
