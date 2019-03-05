@@ -24,21 +24,18 @@
         <v-card-title class="headline blue-grey darken-1" primary-title>
           <span class="white--text">{{currentTest.name}}</span>
           <v-spacer></v-spacer>
-          <v-btn flat dark>{{currentTime}} минут</v-btn>
+          <v-btn flat dark>Время {{currentTime.min}}:{{currentTime.sec}}</v-btn>
         </v-card-title>
         <v-card-text>
-          <!--
-                    //?   Как же сделать, 
-                    //?   vuetify скорее всего не поможет  
-                    //?   и нужно при нажатии на 'следующий', записывать ответ на вопрос в массив.
-          -->
-          <v-carousel light interval="100000" hide-delimiters>
+          <v-carousel light interval="90000" hide-delimiters>
             <v-carousel-item v-for="(question, i) in currentTest.questions" :key="i">
               <div class="ma-4">
                 <h2>{{question.question}}</h2>
                 <v-list>
                   <v-list-tile avatar v-for="(answer, j) in question.answers" :key="j">
-                    <v-list-tile-title @click="addAnswer(i, j)" class="answer">
+                    <v-list-tile-title 
+                        @click="addAnswer(i, j)" 
+                        class="answer">
                       {{j+1}}) {{answer.answer}}
                       <!-- //!Работает только если начинать с первого вопроса и по порядку  -->
                       <span v-if="answers[i]">
@@ -71,15 +68,17 @@ export default {
 			dialog: false,
 			currentTest: [],
 			currentTime: 0,
-			answers: [], //! Отправляется вопрос и ответ на него. {question: '', answer: ''}
-			time: 0,
+			answers: [],
+            time: 0,
+            val: true
 		};
 	},
 	created() {
 		this.getStudentTests();
-	},
+    },
 	methods: {
 		async getStudentTests() {
+            //TODO: Если тест уже пройден, вывести время за которое он пройден, и кол-во правильных и неправильных ответов
 			try {
 				let response = await StudentServices.getStudentTests();
 				if (response.data.tests) {
@@ -87,7 +86,7 @@ export default {
 				} else {
 					console.log('Get student test error');
 					this.getStudentTests();
-				}
+                }
 			} catch (err) {
 				console.log(err);
 			}
@@ -118,12 +117,24 @@ export default {
 		openTestDialog(test) {
 			this.dialog = true;
 			this.currentTest = test.test;
-			this.currentTime = test.test.time;
-			//TODO: Завершение работы при конце времени, неотвеченные вопросы записываются в incorrect и результат уходит на сервер
-			setTimeout(() => {
-				this.timeOver();
-			}, this.currentTime * 100);
-			//TODO: Логика работы обратного счетчика, каждую секунду обновлять currentTime
+			this.currentTime = {
+				min: test.test.time,
+				sec: 0,
+			};
+			//Логика работы счетчика, каждую секунду обновлять currentTime
+			let currentTimeInterval = setInterval(() => {
+				if (this.currentTime == 0) {
+					clearInterval(currentTimeInterval);
+				} else if (this.currentTime.sec == 0 && this.currentTime.min == 0) {
+					clearInterval(currentTimeInterval);
+					this.timeOver();
+				} else if(this.currentTime.sec == 0) {
+					this.currentTime.min -= 1;
+					this.currentTime.sec = 59;
+				}else{
+                    this.currentTime.sec -= 1;
+                }
+			}, 1000);
 		},
 		cancelTestPass() {
 			this.dialog = false;
@@ -132,13 +143,13 @@ export default {
 			this.time = 0;
 		},
 		timeOver() {
-			console.log('Время потраченно');
+			alert('Время потраченно');
 		},
 		passTest() {
 			//* TODO: Тест проверяется и проходится на фронте и отправляется только результат
+			//TODO: Выделение выбранного ответа и выделение при правильных и неправельных ответов
 			//TODO: Проверка теста, показ ошибок и ответов
-            //TODO: Выделение выбранного ответа и выделение при проверка правильных и неправельных ответов
-            //TODO: При прохождении теста, запись что тест уже пройден
+			//TODO: При прохождении теста, запись что тест уже пройден
 			if (this.currentTest.questions.length !== this.answers.length) {
 				alert('Вы ответили не на все вопросы');
 			} else {
