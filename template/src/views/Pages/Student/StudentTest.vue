@@ -27,39 +27,48 @@
           <v-btn flat dark>Время {{currentTime.min}}:{{currentTime.sec}}</v-btn>
         </v-card-title>
         <v-card-text>
-          <v-carousel light interval="90000" hide-delimiters>
-            <v-carousel-item v-for="(question, i) in currentTest.questions" :key="i">
+          <v-carousel light interval="10000" hide-delimiters>
+            <v-carousel-item v-for="(question, i) in answers" :key="i">
               <div class="ma-4">
                 <h2>{{question.question}}</h2>
-                <v-list>
+                <v-list v-if="isPass">
                   <v-list-tile avatar v-for="(answer, j) in question.answers" :key="j">
                     <v-list-tile-title 
-                        @click="addAnswer(i, j)" 
-                        class="answer">
+                        @click="answer.isSelected = !answer.isSelected" 
+                        class="answer"
+                        :class="{'answer-active': answer.isSelected, 'isAnswer': currentTest.questions[i].answers[j].isAnswer}">
                       {{j+1}}) {{answer.answer}}
-                      <!-- //!Работает только если начинать с первого вопроса и по порядку  -->
-                      <span v-if="answers[i]">
-                        <v-icon v-if="j == answers[i].answer" color="teal">check_circle</v-icon>
-                      </span>
+                    </v-list-tile-title>
+                  </v-list-tile>
+                </v-list>
+                <v-list v-else>
+                  <v-list-tile avatar v-for="(answer, j) in question.answers" :key="j">
+                    <v-list-tile-title 
+                        @click="answer.isSelected = !answer.isSelected" 
+                        class="answer"
+                        :class="{'answer-active': answer.isSelected}">
+                      {{j+1}}) {{answer.answer}}
                     </v-list-tile-title>
                   </v-list-tile>
                 </v-list>
               </div>
             </v-carousel-item>
           </v-carousel>
+          
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="error" flat @click="cancelTestPass()">Отмена</v-btn>
-          <v-btn color="teal" dark @click="passTest()">Сдать</v-btn>
+          <v-btn color="error" v-if="isPass" flat @click="cancelTestPass()">Закрыть</v-btn>
+          <v-btn color="error" v-if="!isPass" flat @click="cancelTestPass()">Отмена</v-btn>
+          <v-btn color="teal" v-if="!isPass" dark @click="checkTest()">Сдать</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
   </v-content>
 </template>
 <script>
-import lodash from 'lodash';
+// import lodash from 'lodash';
 import StudentServices from '@/services/Student';
 export default {
 	data() {
@@ -69,8 +78,8 @@ export default {
 			currentTest: [],
 			currentTime: 0,
 			answers: [],
-            time: 0,
-            val: true
+            val: true,
+            isPass: false,
 		};
 	},
 	created() {
@@ -91,37 +100,32 @@ export default {
 				console.log(err);
 			}
 		},
-		addAnswer(question, answer) {
-			let data = {
-				question: question,
-				answer: answer,
-			};
-			let index = lodash.findIndex(this.answers, el => {
-				return el.question == data.question;
-			});
-			if (index == -1) {
-				this.answers.push(data);
-			} else {
-				this.answers[index] = data;
-			}
-			this.answers.sort((a, b) => {
-				if (a.question > b.question) {
-					return 1;
-				} else if (a.question < b.question) {
-					return -1;
-				} else {
-					return 0;
-				}
-			});
-		},
 		openTestDialog(test) {
 			this.dialog = true;
-			this.currentTest = test.test;
-			this.currentTime = {
+            this.currentTest = test.test;
+            let data = [];
+            for(let question of this.currentTest.questions){
+                let answers = [];
+                for(let answer of question.answers){
+                    answers.push({
+                        answer: answer.answer,
+                        isSelected: false
+                    });
+                }
+                data.push({
+                    question: question.question,
+                    answers: answers
+                });
+            }
+            console.log(data)
+            this.answers = data;
+            
+            //* Счетчик теста
+            this.currentTime = {
 				min: test.test.time,
 				sec: 0,
 			};
-			//Логика работы счетчика, каждую секунду обновлять currentTime
+			//Логика работы счетчика
 			let currentTimeInterval = setInterval(() => {
 				if (this.currentTime == 0) {
 					clearInterval(currentTimeInterval);
@@ -138,57 +142,31 @@ export default {
 		},
 		cancelTestPass() {
 			this.dialog = false;
-			this.currentTest = [];
-			this.currentTime = 0;
-			this.time = 0;
+            this.currentTest = [];
+            this.answers = [];
+            this.currentTime = 0;
+            this.isPass = false;
 		},
 		timeOver() {
 			alert('Время потраченно');
 		},
-		passTest() {
-			//* TODO: Тест проверяется и проходится на фронте и отправляется только результат
-			//TODO: Выделение выбранного ответа и выделение при правильных и неправельных ответов
-			//TODO: Проверка теста, показ ошибок и ответов
-			//TODO: При прохождении теста, запись что тест уже пройден
-			if (this.currentTest.questions.length !== this.answers.length) {
-				alert('Вы ответили не на все вопросы');
-			} else {
-				let correct = [];
-				let incorrect = [];
+		checkTest() {
+            let correct = 0;
+            let incorrect = 0;
+            let questions = this.currentTest.questions;
+            for(let i = 0; i < questions.length; i++){
+                //TODO: Сравнить результаты с тестом.
+                
+            }
+            console.log({
+                correct: correct,
+                incorrect: incorrect
+            })
+            this.isPass = true
+        },
+        passTest(){
 
-				let currentTestQuestions = this.currentTest.questions;
-				for (let i = 0; i < currentTestQuestions.length; i++) {
-					// Проверка ответа
-					let answer =
-						currentTestQuestions[i].answers[this.answers[i].answer].isAnswer;
-					if (answer) {
-						correct.push(this.answers[i]);
-					} else {
-						incorrect.push(this.answers[i]);
-					}
-				}
-
-				console.log('Correct');
-				console.log(correct);
-				console.log('Incorrect');
-				console.log(incorrect);
-
-				//? Вывод и запись результатов в бд
-				console.log({
-					result: {
-						correct: correct.length,
-						incorrect: incorrect.length,
-						time: this.currentTime,
-					},
-				});
-
-				//? Завершение теста
-				this.dialog = false;
-				this.currentTest = [];
-				this.currentTime = 0;
-				this.time = 0;
-			}
-		},
+        }
 	},
 };
 </script>
@@ -204,5 +182,8 @@ export default {
   &-active {
     color: #00897B !important;
   }
+}
+.isAnswer{
+    color: #00597B !important;
 }
 </style>
