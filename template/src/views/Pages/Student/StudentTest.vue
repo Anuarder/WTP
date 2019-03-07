@@ -27,7 +27,7 @@
           <v-btn flat dark>Время {{currentTime.min}}:{{currentTime.sec}}</v-btn>
         </v-card-title>
         <v-card-text>
-          <v-carousel light interval="10000" hide-delimiters>
+          <v-carousel light interval="9999" hide-delimiters>
             <v-carousel-item v-for="(question, i) in answers" :key="i">
               <div class="ma-4">
                 <h2>{{question.question}}</h2>
@@ -68,7 +68,6 @@
   </v-content>
 </template>
 <script>
-// import lodash from 'lodash';
 import StudentServices from '@/services/Student';
 export default {
 	data() {
@@ -155,12 +154,26 @@ export default {
             let incorrect = 0;
             let questions = this.currentTest.questions;
             for(let i = 0; i < questions.length; i++){
-                //TODO: Сравнить результаты с тестом.
-                
+                for(let j = 0; j < questions[i].answers.length; j++){
+                    let isSelected = this.answers[i].answers[j].isSelected;
+                    let isAnswer = questions[i].answers[j].isAnswer;
+                    if(isSelected == true && isAnswer == true){
+                        correct++;
+                        break;
+                    }else if(isSelected == false && isAnswer == false 
+                        || isSelected == true && isAnswer == false
+                        || isSelected == false && isAnswer == true){
+                        console.log('incorrect');
+                    }
+                    //TODO: Сделать множественный выбор
+                }
+            }
+            if(correct < 0){
+                correct = 0;
             }
             console.log({
                 correct: correct,
-                incorrect: incorrect
+                incorrect: questions.length - correct
             })
             this.isPass = true
         },
@@ -172,18 +185,21 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .answer {
-  cursor: pointer;
+  cursor pointer
 
   &:hover {
-    color: #00897B;
-    transition: 0.2s;
+    color #00897B
+    transition 0.2s
   }
 
   &-active {
-    color: #00897B !important;
+    font-weight 600
+    color #193FFF !important
   }
+
 }
 .isAnswer{
-    color: #00597B !important;
+    font-weight 600
+    color #F82A84  !important
 }
 </style>
