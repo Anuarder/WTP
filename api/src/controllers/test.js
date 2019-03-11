@@ -91,9 +91,18 @@ module.exports = {
             );
             console.log(test);
             console.log(group);
-            res.send({
-                message: "Тест отправлен"
-            });
+            if(test.nModified >= 1 && group.nModified >= 1){
+                res.send({
+                    success: true,
+                    message: "Тест отправлен"
+                });
+            }else{
+                res.send({
+                    success: false,
+                    message: "Тест не отправлен"
+                });
+            }
+            
         } catch (err) {
             res.send({
                 error: err

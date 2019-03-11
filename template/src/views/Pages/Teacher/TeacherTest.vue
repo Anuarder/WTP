@@ -86,11 +86,17 @@ export default {
 		},
 		async sendTest(test) {
 			try {
-				let reponse = await TeacherServices.sendTest({
+				let response = await TeacherServices.sendTest({
 					id: test._id,
 					groups: this.groups,
 				});
-				console.log(reponse.data.message);
+				if (response.data.success) {
+					console.log(response.data.message);
+					this.currentTest = '';
+				} else {
+					//TODO: Отправляется не с первого раза
+					console.log(response.data.message);
+				}
 				this.dialog = false;
 			} catch (err) {
 				console.log(err);
