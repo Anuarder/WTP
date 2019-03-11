@@ -147,7 +147,8 @@ export default {
             this.isPass = false;
 		},
 		timeOver() {
-			alert('Время потраченно');
+            alert('Время потраченно');
+            this.checkTest();
 		},
 		checkTest() {
             let questions = this.currentTest.questions;

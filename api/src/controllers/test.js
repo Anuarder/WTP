@@ -33,6 +33,7 @@ module.exports = {
             res.send({
                 error: err
             });
+            console.log("\x1b[31m", err); //"\x1b[31m", для окрашивания текста в красный 
         }
     },
     async deleteTest(req, res) {
@@ -58,7 +59,7 @@ module.exports = {
             res.send({
                 error: err
             });
-            console.log(err);
+            console.log("\x1b[31m", err);
         }
     },
     async getTests(req, res) {
@@ -74,6 +75,7 @@ module.exports = {
             res.send({
                 error: err
             });
+            console.log("\x1b[31m", err);
         }
     },
     async sendTest(req, res) {
@@ -96,7 +98,7 @@ module.exports = {
             res.send({
                 error: err
             });
-            console.log(err);
+            console.log("\x1b[31m", err);
         }
     },
     async getStudentTests(req, res) {

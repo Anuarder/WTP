@@ -120,11 +120,11 @@ export default {
 					this.success_message = 'Тест создан';
 					this.succesAlert = true;
           // Очистка полей
-          this.name = '';
-          this.time = '';
-          this.questions = [];
 					setTimeout(() => {
-						this.succesAlert = false;
+            this.succesAlert = false;
+            this.name = '';
+            this.time = '';
+            this.questions = [];
 					}, 800);
 				} else {
 					this.performingRequest = false;
