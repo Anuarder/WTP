@@ -24,6 +24,7 @@ module.exports = {
                     { _id: req.userData.id },
                     { $addToSet: { tests: saveTest._id } }
                 );
+                //TODO: Проверка на отправку теста modify = 1
                 res.send({
                     message: "Тест создан"
                 });
@@ -37,6 +38,7 @@ module.exports = {
     async deleteTest(req, res) {
         try {
             //TODO: Нужно чтоб у ученика тоже удалялся, или хранился отдельно с результатами и тд
+            //TODO: Не удаляется из группы
             let test = await Test.findOne({ _id: req.body.id });
             await Test.remove({ _id: req.body.id });
             await User.updateOne(
@@ -75,6 +77,7 @@ module.exports = {
         }
     },
     async sendTest(req, res) {
+        //TODO: Проблема с отправкой тестов. Группа не обновляется
         try {
             let test = await Test.updateOne(
                 { _id: req.body.id },

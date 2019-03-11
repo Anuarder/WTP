@@ -101,7 +101,7 @@ export default {
 		},
 		openTestDialog(test) {
 			this.dialog = true;
-            this.currentTest = test.test;
+            this.currentTest = test.test; 
             let data = [];
             for(let question of this.currentTest.questions){
                 let answers = [];
@@ -150,31 +150,29 @@ export default {
 			alert('Время потраченно');
 		},
 		checkTest() {
-            let correct = 0;
-            let incorrect = 0;
             let questions = this.currentTest.questions;
+            let data = [];
             for(let i = 0; i < questions.length; i++){
+                let answer = 0;
                 for(let j = 0; j < questions[i].answers.length; j++){
                     let isSelected = this.answers[i].answers[j].isSelected;
                     let isAnswer = questions[i].answers[j].isAnswer;
                     if(isSelected == true && isAnswer == true){
-                        correct++;
-                        break;
-                    }else if(isSelected == false && isAnswer == false 
-                        || isSelected == true && isAnswer == false
-                        || isSelected == false && isAnswer == true){
-                        console.log('incorrect');
+                        answer++;
+                    }else if(isSelected == false && isAnswer == true){
+                        answer--; 
+                        if(answer < 0){
+                           answer = 0; 
+                        }
                     }
-                    //TODO: Сделать множественный выбор
+                    // isSelected == false && isAnswer == false  || isSelected == true && isAnswer == false || 
                 }
+                data.push({
+                    question: i,
+                    answer: answer
+                });
             }
-            if(correct < 0){
-                correct = 0;
-            }
-            console.log({
-                correct: correct,
-                incorrect: questions.length - correct
-            })
+            console.log(data);
             this.isPass = true
         },
         passTest(){
