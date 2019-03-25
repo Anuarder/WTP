@@ -1,16 +1,15 @@
 import store from '@/store'
 
-import TeacherStatistics from '@/views/Pages/Teacher/TeacherStatistics'
+import TeacherResults from '@/views/Pages/Teacher/TeacherResults'
 import TeacherTest from '@/views/Pages/Teacher/TeacherTest'
 import TeacherCreateTest from '@/views/Pages/Teacher/TeacherCreateTest'
-import TeacherCreateGroup from '@/views/Pages/Teacher/TeacherCreateGroup'
-import TeacherGroups from '@/views/Pages/Teacher/TeacherGroups'
+import TeacherStudents from '@/views/Pages/Teacher/TeacherStudents'
 
 export default [
     {
-        path: '/teacher-statistics',
-        name: 'teacherStatistics',
-        component: TeacherStatistics,
+        path: '/teacher-results',
+        name: 'teacherResults',
+        component: TeacherResults,
         beforeEnter(to, from, next){
             checkTeacherRole(to, from, next)
         }
@@ -32,17 +31,9 @@ export default [
         }
     },
     {
-        path: '/teacher-create-group',
-        name: 'teacherCreateGroup',
-        component: TeacherCreateGroup,
-        beforeEnter(to, from, next){
-            checkTeacherRole(to, from, next)
-        }
-    },
-    {
-        path: '/teacher-groups',
-        name: 'teacherGroups',
-        component: TeacherGroups,
+        path: '/teacher-students',
+        name: 'teacherStudents',
+        component: TeacherStudents,
         beforeEnter(to, from, next){
             checkTeacherRole(to, from, next)
         }

@@ -25,9 +25,9 @@ const router = new Router({
 				if(store.state.user){
 					switch (store.state.user.role) {
 						case 'student':
-							return {name: 'studentStatistics'};
+							return {name: 'studentPassedTests'};
 						case 'teacher':
-							return {name: 'teacherStatistics'};
+							return {name: 'teacherResults'};
 					}
 				}else{
 					return {name: 'login'};

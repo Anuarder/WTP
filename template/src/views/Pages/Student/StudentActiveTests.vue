@@ -84,9 +84,8 @@ export default {
 	},
 	methods: {
 		async getStudentTests() {
-			//TODO: Если тест уже пройден, вывести время за которое он пройден, и кол-во правильных и неправильных ответов
 			try {
-				let response = await StudentServices.getStudentTests();
+				let response = await StudentServices.getActiveTests();
 				if (response.data.tests) {
 					this.tests = response.data.tests;
 				} else {
@@ -170,7 +169,6 @@ export default {
 							answer = 0;
 						}
 					}
-					// isSelected == false && isAnswer == false  || isSelected == true && isAnswer == false ||
 				}
 				data.push({
 					question: i,

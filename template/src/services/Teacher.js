@@ -1,28 +1,13 @@
 import Api from '@/services/Api'
 
 export default {
-    createGroup(value) {
-        return Api().post('createGroup', value);
+    createTest(payload){
+        return Api().post('/createTest', payload);
     },
-    deleteGroup(value){
-        return Api().post('deleteGroup', value);
+    deleteTest(payload){
+        return Api().post('/deleteTest', payload);
     },
-    getStudents(){
-        return Api().get('getStudents');
-    },
-    getGroups(){
-        return Api().get('getGroups');
-    },
-    createTest(value){
-        return Api().post('createTest', value);
-    },
-    deleteTest(value){
-        return Api().post('deleteTest', value);
-    },
-    getTests(){
-        return Api().get('getTests');
-    },
-    sendTest(value){
-        return Api().post('sendTest', value);
+    sendTestToStudents(payload){
+        return Api().post('/sendTestToStudents', payload);
     }
 }

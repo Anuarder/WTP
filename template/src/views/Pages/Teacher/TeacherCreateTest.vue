@@ -4,7 +4,7 @@
       <div class="login-content">
         <h1 class="text-xs-center display-1 font-weight-light top-text">Добавить тест</h1>
         <div class="login-form">
-          <v-form ref="registerForm" @submit.prevent v-model="valid" class="mt-3 mb-3">
+          <v-form ref="testForm" @submit.prevent v-model="valid" class="mt-3 mb-3">
             <v-alert
               v-model="errorAlert"
               outline
@@ -98,7 +98,7 @@ export default {
 	},
 	methods: {
 		validate() {
-			if (this.$refs.registerForm.validate()) {
+			if (this.$refs.testForm.validate()) {
 				event.preventDefault();
 				this.performingRequest = true;
 				this.createTest();
@@ -122,10 +122,9 @@ export default {
           // Очистка полей
 					setTimeout(() => {
             this.succesAlert = false;
-            this.name = '';
-            this.time = '';
+            this.$refs.testForm.reset();
             this.questions = [];
-					}, 800);
+					}, 1000);
 				} else {
 					this.performingRequest = false;
 					this.error_message = response.data.error;

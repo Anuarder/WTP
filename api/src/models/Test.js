@@ -9,7 +9,6 @@ const testSchema = new Schema(
             type: Map,
             of: Number
         },
-        groups: [String],
         time: Number
     },
     {

@@ -73,16 +73,15 @@ export default {
         checkRole(){
             if(this.user.role == 'student'){
                 this.menu = [
-                    { icon: 'assessment', name: 'Статистика', path: 'studentStatistics' },
-                    { icon: 'question_answer', name: 'Тестирование', path: 'studentTest' },
+                    { icon: 'question_answer', name: 'Результаты', path: 'studentPassedTests' },
+                    { icon: 'assessment', name: 'Активные тесты', path: 'studentActiveTests' },
                 ]
             }else if(this.user.role == 'teacher'){
                 this.menu = [
-                    { icon: 'assessment', name: 'Статистика', path: 'teacherStatistics' },
+                    { icon: 'assessment', name: 'Результаты', path: 'teacherResults' },
                     { icon: 'question_answer', name: 'Провести тестирование', path: 'teacherTest' },
                     { icon: 'note_add', name: 'Добавить тест', path: 'teacherCreateTest' },
-                    { icon: 'group_add', name: 'Добавить группу', path: 'teacherCreateGroup' },
-                    { icon: 'people', name: 'Группы', path: 'teacherGroups' },
+                    { icon: 'people', name: 'Студенты', path: 'teacherStudents' },
                 ]
             }
         },

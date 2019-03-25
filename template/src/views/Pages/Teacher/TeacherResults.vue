@@ -1,7 +1,7 @@
 <template>
     <v-content>
         <v-container>
-            Statistics
+            Results
         </v-container>
     </v-content>
 </template>

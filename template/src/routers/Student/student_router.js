@@ -1,21 +1,21 @@
 import store from '@/store'
 
-import StudentStatistics from '@/views/Pages/Student/StudentStatistics'
-import StudentTest from '@/views/Pages/Student/StudentTest'
+import StudentActiveTests from '@/views/Pages/Student/StudentActiveTests'
+import StudentPassedTests from '@/views/Pages/Student/StudentPassedTests'
 
 export default[
     {
-        path: '/student-statistics',
-        name: 'studentStatistics',
-        component: StudentStatistics,
+        path: '/student-active-tests',
+        name: 'studentActiveTests',
+        component: StudentActiveTests,
         beforeEnter(to, from, next){
             checkStudentRole(to, from, next)
         }
     },
     {
-        path: '/student-test',
-        name: 'studentTest',
-        component: StudentTest,
+        path: '/student-passed-tests',
+        name: 'studentPassedTests',
+        component: StudentPassedTests,
         beforeEnter(to, from, next){
             checkStudentRole(to, from, next)
         }
