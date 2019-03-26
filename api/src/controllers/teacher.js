@@ -32,7 +32,6 @@ module.exports = {
                     { _id: req.userData.id },
                     { $addToSet: { tests: saveTest._id } }
                 );
-                //TODO: Проверка на отправку теста modify = 1
                 res.send({
                     message: "Тест создан"
                 });
