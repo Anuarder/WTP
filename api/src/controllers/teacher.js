@@ -110,6 +110,19 @@ module.exports = {
             });
         }
     },
+    async deleteTeacherStudents(req, res){
+        try{
+            await User.updateOne({_id: req.userData.id}, {$pull: {students: {$in: req.body.students}}});
+            res.send({
+                message: "Students deleted"
+            });
+        }catch(err){
+            console.log("\x1b[31m", err);
+            res.status(400).send({
+                error: err
+            });
+        }
+    },
     async getTeacherTests(req, res){
         try{
             let teacher = await User.findOne({_id: req.userData.id});

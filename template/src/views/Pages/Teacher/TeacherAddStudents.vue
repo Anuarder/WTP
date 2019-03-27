@@ -1,75 +1,28 @@
 <template>
     <v-content>
         <v-container>
-            <v-card>
-                <v-card-title class="headline">
-                    <v-btn 
-                        class="text-none"
-                        color="primary"
-                        @click="addStudents()">
-                        Добавить
-                    </v-btn>
-                    <v-spacer></v-spacer>
-                    <v-text-field
-                        v-model="searchStudent"
-                        append-icon="search"
-                        label="Поиск"
-                        single-line
-                        hide-details>
-                    </v-text-field>
-                </v-card-title>
-                <v-data-table
-                    class="students-table"
-                    :rows-per-page-items="rowsPerPageItems"
-                    :headers="headers"
-                    :items="filterStudents">
-                    <template slot="items" slot-scope="props">
-                        <td>{{ props.item.name }}</td>
-                        <td>{{ props.item.email }}</td>
-                        <td class="text-xs-center">
-                            <input 
-                                type="checkbox" 
-                                class="students-checkbox"
-                                v-model="selectedStudents" 
-                                :value="props.item.id">
-                        </td>
-                    </template>
-                </v-data-table>
-            </v-card>
+            <teacher-students-component
+                :students="students"
+                action="Добавить"
+                @handleClick="addStudents">
+            </teacher-students-component>
         </v-container>
     </v-content>
 </template>
 <script>
+import TeacherStudentsComponent from './components/TeacherStudentsComponent'
 import TeacherServices from '@/services/Teacher'
 export default {
+    components: {
+        TeacherStudentsComponent
+    },
     data(){
         return{
-            searchStudent: '',
             students: [],
-            selectedStudents: [],
-            headers: [
-            { text: 'Имя', sortable: false },
-            { text: 'Email', sortable: false },
-            { text: 'Выбор', align: "center", sortable: false },
-            ],
-            rowsPerPageItems: [10, 20, 30]
         }
     },
     created(){
         this.getAllStudents();
-    },
-    computed:{
-        filterStudents(){
-            if(this.searchStudent === ''){
-                return this.students;
-            }else{
-                return this.students.filter(item => {
-                    if(item.name.toLowerCase().indexOf(this.searchStudent.toLowerCase()) !== -1){
-                        return item;
-                    }
-                });
-            }
-        }
     },
     methods:{
         async getAllStudents(){
@@ -88,15 +41,19 @@ export default {
                 console.log(err);
             }
         },
-        async addStudents(){
+        async addStudents(selectedStudents){
             try{
-                let response = await TeacherServices.addStudents({
-                    students: this.selectedStudents
-                });
-                if(response.data.message){
-                    alert('Студенты добавленны');
+                if(selectedStudents.length === 0){
+                    alert('Выберите студентов');
                 }else{
-                    alert('Ошибка добавления');
+                    let response = await TeacherServices.addStudents({
+                        students: selectedStudents
+                    });
+                    if(response.data.message){
+                        alert('Студенты добавленны');
+                    }else{
+                        alert('Ошибка добавления');
+                    }
                 }
             }catch(err){
                 console.log(err);
@@ -105,34 +62,3 @@ export default {
     }
 }
 </script>
-<style scoped>
-.students-table td, th{
-    font-size: 1.2rem;
-}
-.students-checkbox{
-    cursor: pointer;
-    position: relative;
-    appearance: none;
-    font-size: 1.5rem;
-    margin: 0;
-    color: inherit;
-    outline: none;
-    font-family: 'Font Awesome 5 Free';
-    transition: 300ms ease-out;
-}
-.students-checkbox::after {
-    content: '\f111';
-    color: #0D47A1;
-    display: inline-block;
-    text-align: center;
-}
-.students-checkbox:checked::after {
-    font-weight: 900;
-}
-.students-checkbox:active {
-    transform: scale(.4);
-}
-.students-checkbox:checked::after {
-    content: '\f058';
-}
-</style>

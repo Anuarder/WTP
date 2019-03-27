@@ -29,9 +29,12 @@
                                 small 
                                 class="text-none" 
                                 color="success"
-                                @click="sendTestToStudents(test)">
+                                @click="dialog = true">
                                 Отправить тест
                             </v-btn>
+                            <v-dialog v-model="dialog" max-width="500">
+                                <teacher-students-component></teacher-students-component>
+                            </v-dialog>
                         </v-card-actions>
                     </v-card>
                 </v-flex>
@@ -43,12 +46,18 @@
     </v-content>
 </template>
 <script>
+//TODO: Изменить вид на таблицы
+import TeacherStudentsComponent from './components/TeacherStudentsComponent'
 import TeacherServices from '@/services/Teacher'
 export default {
+    components: {
+        TeacherStudentsComponent
+    },
     data(){
         return{
             tests: [],
-            students: []
+            students: [],
+            dialog: false,
         }
     },
     created(){
@@ -60,7 +69,6 @@ export default {
             try{
                 let response = await TeacherServices.getTeacherTests();
                 this.tests = response.data.tests;
-                console.log(this.tests);
             }catch(err){
                 console.log(err);
             }
@@ -83,7 +91,6 @@ export default {
             try{
                 let response = await TeacherServices.getTeacherStudents();
                 this.students = response.data.students;
-                console.log(this.students);
             }catch(err){
                 console.log(err);
             }

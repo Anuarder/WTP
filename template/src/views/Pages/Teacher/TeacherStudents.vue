@@ -1,57 +1,26 @@
 <template>
     <v-content>
         <v-container>
-            <v-card>
-                <v-card-title class="headline">
-                    Ваши студенты
-                    <v-spacer></v-spacer>
-                    <v-text-field
-                        v-model="searchStudent"
-                        append-icon="search"
-                        label="Поиск"
-                        single-line
-                        hide-details>
-                    </v-text-field>
-                </v-card-title>
-                <v-data-table
-                    class="students-table"
-                    :rows-per-page-items="rowsPerPageItems"
-                    :headers="headers"
-                    :items="filterStudents">
-                    <template slot="items" slot-scope="props">
-                        <td>{{ props.item.name }}</td>
-                        <td>{{ props.item.email }}</td>
-                    </template>
-                </v-data-table>
-            </v-card>
+            <teacher-students-component
+                :students="students"
+                action="Отправить тест"
+                deleteStudent
+                @handleClick="sendTestToStudents"
+                @deleteClick="deleteStudent">
+            </teacher-students-component>
         </v-container>
     </v-content>
 </template>
 <script>
+import TeacherStudentsComponent from './components/TeacherStudentsComponent'
 import TeacherServices from '@/services/Teacher'
 export default {
+    components: {
+        TeacherStudentsComponent
+    },
     data(){
         return{
             students: [],
-            searchStudent: '',
-            headers: [
-                { text: 'Имя', sortable: false },
-                { text: 'Email', sortable: false },
-            ],
-            rowsPerPageItems: [10, 20, 30]
-        }
-    },
-    computed:{
-        filterStudents(){
-            if(this.searchStudent === ''){
-                return this.students;
-            }else{
-                return this.students.filter(item => {
-                    if(item.name.toLowerCase().indexOf(this.searchStudent.toLowerCase()) !== -1){
-                        return item;
-                    }
-                });
-            }
         }
     },
     created(){
@@ -73,6 +42,16 @@ export default {
             }catch(err){
                 console.log(err);
             }
+        },
+        async deleteStudent(){
+            try{
+                // TODO: Удалить студента у учителя
+            }catch(err){
+                console.log(err);
+            }
+        },
+        sendTestToStudents(){
+            //TODO: Вытащить тесты ввиде таблицы
         }
     }
 }
