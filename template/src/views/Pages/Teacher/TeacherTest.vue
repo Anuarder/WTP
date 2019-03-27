@@ -70,7 +70,11 @@ export default {
                 let response = await TeacherServices.deleteTest({
                     test: test._id
                 });
-                this.getTeacherTests();
+                if(response.data.message){
+                    this.getTeacherTests();
+                }else{
+                    alert("Ошибка при удалении теста");
+                }
             }catch(err){
                 console.log(err);
             }

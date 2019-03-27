@@ -85,7 +85,6 @@
 </template>
 <script>
 import TeacherServices from '@/services/Teacher'
-import lodash from 'lodash'
 export default {
     data(){
         return{
