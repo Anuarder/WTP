@@ -8,4 +8,7 @@
     color: #fff;
     text-decoration: underline;
 }
+#app{
+    background-color: #fff;
+}
 </style>

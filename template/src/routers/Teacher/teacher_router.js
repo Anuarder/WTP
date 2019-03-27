@@ -4,6 +4,7 @@ import TeacherResults from '@/views/Pages/Teacher/TeacherResults'
 import TeacherTest from '@/views/Pages/Teacher/TeacherTest'
 import TeacherCreateTest from '@/views/Pages/Teacher/TeacherCreateTest'
 import TeacherStudents from '@/views/Pages/Teacher/TeacherStudents'
+import TeacherAddStudents from '@/views/Pages/Teacher/TeacherAddStudents'
 
 export default [
     {
@@ -34,6 +35,14 @@ export default [
         path: '/teacher-students',
         name: 'teacherStudents',
         component: TeacherStudents,
+        beforeEnter(to, from, next){
+            checkTeacherRole(to, from, next)
+        }
+    },
+    {
+        path: '/teacher-addStudents',
+        name: 'teacherAddStudents',
+        component: TeacherAddStudents,
         beforeEnter(to, from, next){
             checkTeacherRole(to, from, next)
         }

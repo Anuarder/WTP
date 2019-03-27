@@ -58,7 +58,7 @@ import { mapState } from 'vuex'
 export default {
     data(){
         return{
-            mini: true,
+            mini: false,
             sidebar: true,
             menu: ''
         }
@@ -81,6 +81,7 @@ export default {
                     { icon: 'assessment', name: 'Результаты', path: 'teacherResults' },
                     { icon: 'question_answer', name: 'Провести тестирование', path: 'teacherTest' },
                     { icon: 'note_add', name: 'Добавить тест', path: 'teacherCreateTest' },
+                    { icon: 'group_add', name: 'Добавить студетов', path: 'teacherAddStudents' },
                     { icon: 'people', name: 'Студенты', path: 'teacherStudents' },
                 ]
             }

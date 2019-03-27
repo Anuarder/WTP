@@ -9,7 +9,8 @@ const testSchema = new Schema(
             type: Map,
             of: Number
         },
-        time: Number
+        time: Number,
+        students: [String]
     },
     {
         collection: "Tests"

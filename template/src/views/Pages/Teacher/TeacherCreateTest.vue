@@ -5,21 +5,6 @@
         <h1 class="text-xs-center display-1 font-weight-light top-text">Добавить тест</h1>
         <div class="login-form">
           <v-form ref="testForm" @submit.prevent v-model="valid" class="mt-3 mb-3">
-            <v-alert
-              v-model="errorAlert"
-              outline
-              class="error-alert mb-3"
-              color="#fd5b4d"
-              dismissible
-            >{{error_message}}</v-alert>
-            <v-alert
-              v-model="succesAlert"
-              outline
-              class="error-alert mb-3"
-              color="success"
-              dismissible
-            >{{success_message}}</v-alert>
-            <!-- CODE -->
             <v-text-field
               label="Заголовок"
               solo
@@ -73,7 +58,7 @@
           </v-form>
         </div>
         <hr class="mb-3">
-        <v-btn dark @click="createTest">Добавить тест</v-btn>
+        <v-btn dark @click="validate">Добавить тест</v-btn>
       </div>
     </v-container>
   </v-content>
@@ -89,10 +74,6 @@ export default {
 			time: '',
 			timeRules: [v => !!v || 'Время для прохождения теста в минутах'],
 			questions: [],
-			error_message: '',
-			errorAlert: false,
-			success_message: '',
-			succesAlert: false,
 			performingRequest: false,
 		};
 	},
@@ -104,6 +85,7 @@ export default {
 				this.createTest();
 				this.performingRequest = false;
 			} else {
+        alert("Ошибка валидации");
 				console.log('validate');
 			}
 		},
@@ -116,22 +98,13 @@ export default {
 					time: this.time,
 				});
 				if (response.data.message) {
-					this.performingRequest = false;
-					this.success_message = 'Тест создан';
-					this.succesAlert = true;
-          // Очистка полей
-					setTimeout(() => {
-            this.succesAlert = false;
-            this.$refs.testForm.reset();
-            this.questions = [];
-					}, 1000);
+          this.performingRequest = false;
+          alert("Тест создан");
+          this.$refs.testForm.reset();
+          this.questions = [];
 				} else {
 					this.performingRequest = false;
-					this.error_message = response.data.error;
-					this.errorAlert = true;
-					setTimeout(() => {
-						this.errorAlert = false;
-					}, 1000);
+          alert(`Ошибка ${response.data.error}`);
 				}
 			} catch (error) {
 				console.log(error);

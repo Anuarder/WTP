@@ -70,8 +70,9 @@ module.exports = {
 							email: user.email,
 							role: user.role,
 							id: user._id,
-							groups: user.groups,
-							tests: user.tests
+							tests: user.tests,
+							students: user.students,
+							testResult: user.testResult
 						},
 						token: token
 					});

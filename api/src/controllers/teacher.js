@@ -2,9 +2,59 @@ const User = require('../models/User');
 const Test = require('../models/Test');
 
 module.exports = {
-    async getStudents(req, res){
+    async getAllStudents(req, res){
         try{
-            // TODO: Получить студентов учителя
+            let students = await User.find({role: 'student'});
+            let filterStudents = [];
+            for(let el of students){
+                filterStudents.push({
+                    name: el.name,
+                    email: el.email,
+                    testResults: el.testResults,
+                    id: el._id
+                });
+            }
+            res.send({
+                students: filterStudents
+            });
+        }catch(err){
+            console.log("\x1b[31m", err);
+            res.status(400).send({
+                error: "Students test get error"
+            });
+        }
+    },
+    async getTeacherStudents(req, res){
+        try{
+            let teacher = await User.findOne({_id: req.userData.id});
+            let students = [];
+            for(let student of teacher.students){
+                let val = await User.findOne({_id: student});
+                students.push({
+                    name: val.name,
+                    email: val.email,
+                    testResults: val.testResults,
+                    id: val._id
+                });
+            }
+            res.send({
+                students: students
+            });
+        }catch(err){
+            console.log("\x1b[31m", err); 
+            res.status(400).send({
+                error: err
+            });
+        }
+    },
+    async addStudents(req, res){
+        try{
+            for(let student of req.body.students){
+                await User.updateOne({_id: req.userData.id}, {$addToSet: {students: student}});
+            }
+            res.send({
+                message: 'students added'
+            })
         }catch(err){
             console.log("\x1b[31m", err); 
             res.status(400).send({
@@ -45,8 +95,29 @@ module.exports = {
     },
     async deleteTest(req, res) {
         try {
-            // TODO: Удалить тест
+            let test = await Test.findOne({_id: req.body.test});
+            await User.update({_id: {$in: test.students}}, {$pull: {tests: req.body.test}});
+            await User.updateOne({_id: req.userData.id}, {$pull: {tests: req.body.test}});
+            await Test.deleteOne({_id: req.body.test});
+
+            res.send({
+                message: "Test deleted"
+            });
         } catch (err) {
+            console.log("\x1b[31m", err);
+            res.status(400).send({
+                error: err
+            });
+        }
+    },
+    async getTeacherTests(req, res){
+        try{
+            let teacher = await User.findOne({_id: req.userData.id});
+            let tests = await Test.find({_id: {$in: teacher.tests}});
+            res.send({
+                tests: tests
+            });
+        }catch(err){
             console.log("\x1b[31m", err);
             res.status(400).send({
                 error: err
@@ -56,6 +127,14 @@ module.exports = {
     async sendTestToStudents(req, res) {
         try {
             // TODO: Отправить тест студентам
+            let students = await User.updateMany({_id: {$in: req.body.students}}, {tests: req.body.test});
+            if(students.nModified !== 0){ //Проверка на обновление
+                res.send({
+                    message: "Update student test"
+                });
+            }else{
+                throw "Update student test error"
+            }
         } catch (err) {
             res.status(400).send({
                 error: err

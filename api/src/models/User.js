@@ -7,8 +7,8 @@ const userSchema = new Schema(
         role: String,
         email: String,
         password: String,
-        tests: [Object],
-        testResuls: [Object],
+        tests: [String],
+        testResults: [Object],
         students: [String]
     },
     {
