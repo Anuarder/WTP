@@ -1,46 +1,6 @@
 <template>
     <v-content>
         <v-container>
-            <!-- <div class="students">
-                <div>
-                    <v-text-field
-                        v-model="searchStudent"
-                        class="search-student-input"
-                        placeholder="Поиск студента"
-                        solo
-                        append-icon="search">
-                    </v-text-field>
-                    <table class="students-table">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Имя</th>
-                                <th>Email</th>
-                                <th class="text-xs-center">Выбрать</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(student, i) in filterStudents" :key="i">
-                                <td>{{i+1}}</td>
-                                <td>{{student.name}}</td>
-                                <td>{{student.email}}</td>
-                                <td class="text-xs-center">
-                                    <input 
-                                        type="checkbox" 
-                                        class="students-checkbox"
-                                        v-model="selectedStudents" 
-                                        :value="student.id">
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <v-btn 
-                        class="text-none" 
-                        color="primary">
-                        Добавить
-                    </v-btn>
-                </div>
-            </div> -->
             <v-card>
                 <v-card-title class="headline">
                     <v-btn 
@@ -49,35 +9,31 @@
                         @click="addStudents()">
                         Добавить
                     </v-btn>
-                <v-spacer></v-spacer>
-                <v-text-field
-                    v-model="searchStudent"
-                    append-icon="search"
-                    label="Поиск"
-                    single-line
-                    hide-details
-                ></v-text-field>
+                    <v-spacer></v-spacer>
+                    <v-text-field
+                        v-model="searchStudent"
+                        append-icon="search"
+                        label="Поиск"
+                        single-line
+                        hide-details>
+                    </v-text-field>
                 </v-card-title>
                 <v-data-table
                     class="students-table"
                     :rows-per-page-items="rowsPerPageItems"
                     :headers="headers"
-                    :items="students"
-                    :search="searchStudent">
-                <template slot="items" slot-scope="props">
-                    <td>{{ props.item.name }}</td>
-                    <td>{{ props.item.email }}</td>
-                    <td class="text-xs-center">
-                        <input 
-                            type="checkbox" 
-                            class="students-checkbox"
-                            v-model="selectedStudents" 
-                            :value="props.item.id">
-                    </td>
-                </template>
-                <v-alert v-slot:no-results :value="true" color="error" icon="warning">
-                    Студент не найден
-                </v-alert>
+                    :items="filterStudents">
+                    <template slot="items" slot-scope="props">
+                        <td>{{ props.item.name }}</td>
+                        <td>{{ props.item.email }}</td>
+                        <td class="text-xs-center">
+                            <input 
+                                type="checkbox" 
+                                class="students-checkbox"
+                                v-model="selectedStudents" 
+                                :value="props.item.id">
+                        </td>
+                    </template>
                 </v-data-table>
             </v-card>
         </v-container>
@@ -102,12 +58,32 @@ export default {
     created(){
         this.getAllStudents();
     },
+    computed:{
+        filterStudents(){
+            if(this.searchStudent === ''){
+                return this.students;
+            }else{
+                return this.students.filter(item => {
+                    if(item.name.toLowerCase().indexOf(this.searchStudent.toLowerCase()) !== -1){
+                        return item;
+                    }
+                });
+            }
+        }
+    },
     methods:{
         async getAllStudents(){
             try{
                 let response = await TeacherServices.getAllStudents();
-                this.students = response.data.students;
-                console.log(this.students);
+                this.students = response.data.students.sort((a, b) => {
+                    if (a.name > b.name) {
+                        return 1;
+                    }
+                    if (a.name < b.name) {
+                        return -1;
+                    }
+                    return 0;
+                });
             }catch(err){
                 console.log(err);
             }
