@@ -8,7 +8,10 @@ export default {
         return Api().get('/getAllStudents');
     },
     addStudents(payload){
-        return Api().post('/addStudents', payload);
+        return Api().put('/addStudents', payload);
+    },
+    deleteTeacherStudents(payload){
+        return Api().put('/deleteTeacherStudents', payload);
     },
     getTeacherTests(){
         return Api().get('/getTeacherTests');
@@ -16,10 +19,10 @@ export default {
     createTest(payload){
         return Api().post('/createTest', payload);
     },
-    deleteTest(payload){
-        return Api().post('/deleteTest', payload);
+    deleteTests(payload){
+        return Api().delete('/deleteTest', payload);
     },
     sendTestToStudents(payload){
-        return Api().post('/sendTestToStudents', payload);
+        return Api().put('/sendTestToStudents', payload);
     }
 }
