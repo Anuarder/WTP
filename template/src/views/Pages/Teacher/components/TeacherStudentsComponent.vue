@@ -43,7 +43,6 @@
     </v-card>
 </template>
 <script>
-import TeacherServices from '@/services/Teacher'
 export default {
     props: {
         students: Array,
