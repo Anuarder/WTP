@@ -19,8 +19,8 @@ export default {
     createTest(payload){
         return Api().post('/createTest', payload);
     },
-    deleteTest(payload){
-        return Api().post('/deleteTest', payload);
+    deleteTests(payload){
+        return Api().post('/deleteTests', payload);
     },
     sendTestToStudents(payload){
         return Api().put('/sendTestToStudents', payload);

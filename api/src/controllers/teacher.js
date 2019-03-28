@@ -93,12 +93,15 @@ module.exports = {
             });
         }
     },
-    async deleteTest(req, res) {
+    async deleteTests(req, res) {
         try {
-            let test = await Test.findOne({_id: req.body.test});
-            await User.updateMany({_id: {$in: test.students}}, {$pull: {tests: req.body.test}});
-            await User.updateOne({_id: req.userData.id}, {$pull: {tests: req.body.test}});
-            await Test.deleteOne({_id: req.body.test});
+            let tests = await Test.find({_id: {$in: req.body.tests}});
+            for(let test of tests){
+                await User.updateMany({_id: {$in: test.students}}, {$pull: {tests: {$in: req.body.tests}}});
+            }
+            await User.updateOne({_id: req.userData.id}, {$pull: {tests: {$in: req.body.tests}}});
+            await Test.deleteMany({_id: {$in: req.body.tests}});
+
             res.send({
                 message: "Test deleted"
             });

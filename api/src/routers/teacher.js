@@ -7,7 +7,7 @@ router.get('/getTeacherTests', checkAuth, TeacherController.getTeacherTests);
 router.get('/getAllStudents', checkAuth, TeacherController.getAllStudents);
 
 router.post('/createTest', checkAuth, TeacherController.createTest);
-router.post('/deleteTest', checkAuth, TeacherController.deleteTest);
+router.post('/deleteTests', checkAuth, TeacherController.deleteTests);
 
 router.put('/sendTestToStudents', checkAuth, TeacherController.sendTestToStudents);
 router.put('/addStudents', checkAuth, TeacherController.addStudents);
