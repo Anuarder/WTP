@@ -43,9 +43,8 @@ export default {
         },
         async addStudents(selectedStudents){
             try{
-                if(selectedStudents.length === 0){
-                    alert('Выберите студентов');
-                }else{
+                let addConfirm = confirm("Добавить студентов?");
+                if(addConfirm){
                     let response = await TeacherServices.addStudents({
                         students: selectedStudents
                     });
@@ -54,6 +53,8 @@ export default {
                     }else{
                         alert('Ошибка добавления');
                     }
+                }else{
+                    alert("Отмена");
                 }
             }catch(err){
                 console.log(err);

@@ -24,7 +24,7 @@
             </v-text-field>
         </v-card-title>
         <v-data-table
-            class="students-table"
+            class="data-table"
             :rows-per-page-items="rowsPerPageItems"
             :headers="headers"
             :items="filterStudents">
@@ -34,7 +34,7 @@
                 <td class="text-xs-center">
                     <input 
                         type="checkbox" 
-                        class="students-checkbox"
+                        class="circle-checkbox"
                         v-model="selectedStudents" 
                         :value="props.item.id">
                 </td>
@@ -76,42 +76,19 @@ export default {
     },
     methods: {
         handleClick(){
-            this.$emit('handleClick', this.selectedStudents);
+            if(this.selectedStudents.length !== 0){
+                this.$emit('handleClick', this.selectedStudents);
+            }else{
+                alert("Выберите студентов");
+            }
         },
         deleteClick(){
-            this.$emit('deleteClick', this.selectedStudents);
+            if(this.selectedStudents.length !== 0){
+                this.$emit('deleteClick', this.selectedStudents);
+            }else{
+                alert("Выберите студентов");
+            }
         }
     }
 }
 </script>
-<style scoped>
-.students-table td, th{
-    font-size: 1.2rem;
-}
-.students-checkbox{
-    cursor: pointer;
-    position: relative;
-    appearance: none;
-    font-size: 1.5rem;
-    margin: 0;
-    color: inherit;
-    outline: none;
-    font-family: 'Font Awesome 5 Free';
-    transition: 300ms ease-out;
-}
-.students-checkbox::after {
-    content: '\f111';
-    color: #0D47A1;
-    display: inline-block;
-    text-align: center;
-}
-.students-checkbox:checked::after {
-    font-weight: 900;
-}
-.students-checkbox:active {
-    transform: scale(.4);
-}
-.students-checkbox:checked::after {
-    content: '\f058';
-}
-</style>

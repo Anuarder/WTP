@@ -45,14 +45,19 @@ export default {
         },
         async deleteTeacherStudents(students){
             try{
-                let response = await TeacherServices.deleteTeacherStudents({
-                    students: students
-                });
-                if(response.data.message){
-                    alert("Студенты удаленны");
-                    this.getTeacherStudents();
+                let deleteConfirm = confirm("Удалить студентов?");
+                if(deleteConfirm){
+                    let response = await TeacherServices.deleteTeacherStudents({
+                        students: students
+                    });
+                    if(response.data.message){
+                        alert("Студенты удаленны");
+                        this.getTeacherStudents();
+                    }else{
+                        alert("Ошибка");
+                    }
                 }else{
-                    alert("Ошибка");
+                    alert("Удаление отмененно");
                 }
             }catch(err){
                 console.log(err);
