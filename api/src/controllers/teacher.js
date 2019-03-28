@@ -78,7 +78,7 @@ module.exports = {
                     },
                 });
                 let saveTest = await newTest.save();
-                await User.update(
+                await User.updateOne(
                     { _id: req.userData.id },
                     { $addToSet: { tests: saveTest._id } }
                 );
@@ -96,10 +96,9 @@ module.exports = {
     async deleteTest(req, res) {
         try {
             let test = await Test.findOne({_id: req.body.test});
-            await User.update({_id: {$in: test.students}}, {$pull: {tests: req.body.test}});
+            await User.updateMany({_id: {$in: test.students}}, {$pull: {tests: req.body.test}});
             await User.updateOne({_id: req.userData.id}, {$pull: {tests: req.body.test}});
             await Test.deleteOne({_id: req.body.test});
-
             res.send({
                 message: "Test deleted"
             });
@@ -112,7 +111,7 @@ module.exports = {
     },
     async deleteTeacherStudents(req, res){
         try{
-            await User.update({_id: req.userData.id}, {$pull: {students: {$in: req.body.students}}});
+            await User.updateOne({_id: req.userData.id}, {$pull: {students: {$in: req.body.students}}});
             res.send({
                 message: "Students deleted"
             });
@@ -139,14 +138,15 @@ module.exports = {
     },
     async sendTestToStudents(req, res) {
         try {
-            let students = await User.updateMany({_id: {$in: req.body.students}}, {tests: req.body.test});
-            if(students.nModified !== 0){ //Проверка на обновление
-                res.send({
-                    message: "Update student test"
-                });
-            }else{
-                throw "Update student test error"
+            for(let test of req.body.tests){
+                await User.updateMany({_id: {$in: req.body.students}}, {$addToSet: {tests: test}});
             }
+            for(let student of req.body.students){
+                await Test.updateMany({_id: {$in: req.body.tests}}, {$addToSet: {students: student}});
+            }
+            res.send({
+                message: "Update student test"
+            });
         } catch (err) {
             res.status(400).send({
                 error: err

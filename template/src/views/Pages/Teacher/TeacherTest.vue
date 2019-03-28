@@ -6,6 +6,7 @@
                 row 
                 wrap>
                 <v-flex 
+                    class="mt-3 mr-3"
                     xs12 
                     md3 
                     v-for="(test, i) in tests" 
@@ -29,11 +30,15 @@
                                 small 
                                 class="text-none" 
                                 color="success"
-                                @click="dialog = true">
+                                @click="openTestDialog(test)">
                                 Отправить тест
                             </v-btn>
                             <v-dialog v-model="dialog" max-width="500">
-                                <teacher-students-component></teacher-students-component>
+                                <teacher-students-component
+                                    :students="students"
+                                    action="Отправить"
+                                    @handleClick="sendTestToStudents">
+                                </teacher-students-component>
                             </v-dialog>
                         </v-card-actions>
                     </v-card>
@@ -57,6 +62,7 @@ export default {
         return{
             tests: [],
             students: [],
+            currentTest: [],
             dialog: false,
         }
     },
@@ -79,6 +85,7 @@ export default {
                     test: test._id
                 });
                 if(response.data.message){
+                    alert("Тест удален");
                     this.getTeacherTests();
                 }else{
                     alert("Ошибка при удалении теста");
@@ -95,16 +102,27 @@ export default {
                 console.log(err);
             }
         },
-        async sendTestToStudents(test){
+        openTestDialog(test){
+            this.dialog = true;
+            this.currentTest = test;
+        },
+        async sendTestToStudents(students){
             try{
-                let response = await TeacherServices.sendTestToStudents({
-                    test: test,
-                    students: this.students
-                });
-                if(response.data.message){
-                    alert("Тест отправлен");
+                let tests = [];
+                tests.push(this.currentTest._id);
+                let confirmSend = confirm("Отправить тест?");
+                if(confirmSend){
+                    let response = await TeacherServices.sendTestToStudents({
+                        tests: tests,
+                        students: students
+                    });
+                    if(response.data.message){
+                        alert("Тест отправлен");
+                    }else{
+                        alert("Тест не отправлен");
+                    }
                 }else{
-                    alert("Тест не отправлен");
+                    alert("Отмена отправки");
                 }
             }catch(err){
                 console.log(err);

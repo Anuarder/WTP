@@ -7,11 +7,11 @@ router.get('/getTeacherTests', checkAuth, TeacherController.getTeacherTests);
 router.get('/getAllStudents', checkAuth, TeacherController.getAllStudents);
 
 router.post('/createTest', checkAuth, TeacherController.createTest);
+router.post('/deleteTest', checkAuth, TeacherController.deleteTest);
 
 router.put('/sendTestToStudents', checkAuth, TeacherController.sendTestToStudents);
 router.put('/addStudents', checkAuth, TeacherController.addStudents);
 router.put('/deleteTeacherStudents', checkAuth, TeacherController.deleteTeacherStudents);
 
-router.delete('/deleteTest', checkAuth, TeacherController.deleteTest);
 
 module.exports = router;
