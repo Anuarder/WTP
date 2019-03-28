@@ -8,7 +8,7 @@
                 {{action}}
             </v-btn>
             <v-btn 
-                v-if="deleteStudent"
+                v-if="deleteStudents"
                 class="text-none"
                 color="error"
                 @click="deleteClick()">
@@ -48,7 +48,7 @@ export default {
     props: {
         students: Array,
         action: String,
-        deleteStudent: Boolean
+        deleteStudents: Boolean
     },
     data(){
         return{

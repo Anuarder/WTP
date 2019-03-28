@@ -4,9 +4,9 @@
             <teacher-students-component
                 :students="students"
                 action="Отправить тест"
-                deleteStudent
+                deleteStudents
                 @handleClick="sendTestToStudents"
-                @deleteClick="deleteStudent">
+                @deleteClick="deleteTeacherStudents">
             </teacher-students-component>
         </v-container>
     </v-content>
@@ -43,9 +43,17 @@ export default {
                 console.log(err);
             }
         },
-        async deleteStudent(){
+        async deleteTeacherStudents(students){
             try{
-                // TODO: Удалить студента у учителя
+                let response = await TeacherServices.deleteTeacherStudents({
+                    students: students
+                });
+                if(response.data.message){
+                    alert("Студенты удаленны");
+                    this.getTeacherStudents();
+                }else{
+                    alert("Ошибка");
+                }
             }catch(err){
                 console.log(err);
             }

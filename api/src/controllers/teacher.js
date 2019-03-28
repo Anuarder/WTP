@@ -112,7 +112,7 @@ module.exports = {
     },
     async deleteTeacherStudents(req, res){
         try{
-            await User.updateOne({_id: req.userData.id}, {$pull: {students: {$in: req.body.students}}});
+            await User.update({_id: req.userData.id}, {$pull: {students: {$in: req.body.students}}});
             res.send({
                 message: "Students deleted"
             });
@@ -139,7 +139,6 @@ module.exports = {
     },
     async sendTestToStudents(req, res) {
         try {
-            // TODO: Отправить тест студентам
             let students = await User.updateMany({_id: {$in: req.body.students}}, {tests: req.body.test});
             if(students.nModified !== 0){ //Проверка на обновление
                 res.send({
