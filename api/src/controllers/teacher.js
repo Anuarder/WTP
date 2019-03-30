@@ -19,7 +19,7 @@ module.exports = {
             });
         }catch(err){
             console.log("\x1b[31m", err);
-            res.status(400).send({
+            res.status(404).send({
                 error: "Students test get error"
             });
         }
@@ -42,7 +42,8 @@ module.exports = {
             });
         }catch(err){
             console.log("\x1b[31m", err); 
-            res.status(400).send({
+            console.log("\x1b[37m"); 
+            res.status(404).send({
                 error: err
             });
         }
@@ -57,6 +58,7 @@ module.exports = {
             })
         }catch(err){
             console.log("\x1b[31m", err); 
+            console.log("\x1b[37m"); 
             res.status(400).send({
                 error: err
             });
@@ -66,8 +68,11 @@ module.exports = {
         try {
             let test = await Test.findOne({ name: req.body.name });
             if (test) {
-                throw "Тест уже создан";
+                res.send({
+                    error: "Тест уже создан"
+                })
             } else {
+                let date = new Date();
                 let newTest = new Test({
                     name: req.body.name,
                     questions: req.body.questions,
@@ -76,6 +81,7 @@ module.exports = {
                         pass: 0,
                         flooded: 0
                     },
+                    date: `${date.getDate()}.${date.getUTCMonth() + 1}.${date.getUTCFullYear()}`,
                 });
                 let saveTest = await newTest.save();
                 await User.updateOne(
@@ -88,7 +94,8 @@ module.exports = {
             }
         } catch (err) {
             console.log("\x1b[31m", err); 
-            res.status(400).send({
+            console.log("\x1b[37m");
+            res.status(405).send({
                 error: err
             });
         }
@@ -134,7 +141,7 @@ module.exports = {
             });
         }catch(err){
             console.log("\x1b[31m", err);
-            res.status(400).send({
+            res.status(404).send({
                 error: err
             });
         }

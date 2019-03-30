@@ -109,7 +109,7 @@ export default {
 			try{
 				let response = await StudentServices.sendTestToVerification({
 					test: this.test._id,
-					passedTest: this.answers
+					passedTest: this.answers,
 				});
 				if(response.data.message){
 					alert("Тест отправлен на проверку");

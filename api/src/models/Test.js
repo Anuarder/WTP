@@ -10,6 +10,7 @@ const testSchema = new Schema(
             of: Number
         },
         time: Number,
+        date: String,
         students: [String]
     },
     {

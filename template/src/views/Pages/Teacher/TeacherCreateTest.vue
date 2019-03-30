@@ -85,7 +85,7 @@ export default {
 				this.createTest();
 				this.performingRequest = false;
 			} else {
-        alert("Ошибка валидации");
+                alert("Ошибка валидации");
 				console.log('validate');
 			}
 		},
@@ -98,15 +98,17 @@ export default {
 					time: this.time,
 				});
 				if (response.data.message) {
-          this.performingRequest = false;
-          alert("Тест создан");
-          this.$refs.testForm.reset();
-          this.questions = [];
+                    this.performingRequest = false;
+                    alert("Тест создан");
+                    this.$refs.testForm.reset();
+                    this.questions = [];
 				} else {
 					this.performingRequest = false;
-          alert(`Ошибка ${response.data.error}`);
+                    alert(`Ошибка ${response.data.error}`);
 				}
 			} catch (error) {
+                alert(error);
+                
 				console.log(error);
 			}
 		},

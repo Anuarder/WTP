@@ -33,6 +33,7 @@
                 <td>{{ props.item.name }}</td>
                 <td>{{ props.item.time }}</td>
                 <td>{{ props.item.questions.length }}</td>
+                <td>{{ props.item.date }}</td>
                 <td class="text-xs-center">
                     <input 
                         type="checkbox" 
@@ -58,6 +59,7 @@ export default {
                 { text: 'Имя', sortable: false },
                 { text: 'Время, мин.', sortable: false },
                 { text: 'Кол-во вопросов', sortable: false},
+                { text: 'Дата создания', sortable: false},
                 { text: 'Выбор', align: "center", sortable: false },
             ],
             selectedTests: [],
