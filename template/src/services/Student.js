@@ -7,7 +7,7 @@ export default {
     getPassedTests(){
         return Api().get('/getPassedTests');
     },
-    passTest(payload){
+    sendTestToVerification(payload){
         return Api().post('/passTest', payload);
     }
 }

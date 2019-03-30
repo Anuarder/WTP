@@ -25,7 +25,7 @@
                 <v-text-field
                   solo
                   class="login-input"
-                  label="Password"
+                  label="Новый пароль"
                   :append-icon="showPassword ? 'visibility_off' : 'visibility'"
                   :type="showPassword ? 'text' : 'password'"
                   @click:append="showPassword = !showPassword"
@@ -36,7 +36,7 @@
                 <v-text-field
                   solo
                   class="login-input"
-                  label="Confirm password"
+                  label="Подтвердите пароль"
                   :append-icon="showPassword ? 'visibility_off' : 'visibility'"
                   :type="showPassword ? 'text' : 'password'"
                   @click:append="showPassword = !showPassword"

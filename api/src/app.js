@@ -25,6 +25,6 @@ app.use(teacherRouter);
 mongoose.connect(config.database_url, { useNewUrlParser: true }, err => {
     if (err) throw err;
     app.listen(config.port, () =>
-        console.log("\u2705  Server running on port " + config.port)
+        console.log("Server running on port " + config.port)
     );
 });
