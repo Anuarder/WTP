@@ -28,7 +28,8 @@
 					<student-test-component
 						v-if="dialog"
 						:test="currentTest"
-						@close="closeTestDialog">
+						@close="closeTestDialog"
+						@updateTest="getActiveTests">
 					</student-test-component>
 				</v-dialog>
 			</v-layout>

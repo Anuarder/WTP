@@ -114,6 +114,7 @@ export default {
 				if(response.data.message){
 					alert("Тест отправлен на проверку");
 					this.cancelTestPass();
+					this.$emit('updateTest');
 				}else{
 					alert("Ошибка при отправке теста");
 				}
