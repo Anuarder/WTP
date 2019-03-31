@@ -40,30 +40,29 @@ module.exports = {
             
             const maxPercent = 100;
             let questionScrore = maxPercent / test.questions.length;
-            
-            for(let question of test.questions){
-                console.log(question);
+
+            let isAnswerCount = 0;
+            let correctAnswer = 0;
+            for(let i = 0; i < test.questions.length; i++){
                 let answerCount = 0;
-                for(let answer of question.answers){
-                    if(answer.isAnswer){
+                for(let j = 0; j < test.questions[i].answers.length; j++){
+                    let isSelected = passedTest[i].answers[j].isSelected;
+                    let isAnswer = test.questions[i].answers[j].isAnswer;
+                    
+                    if(isAnswer){
+                        isAnswerCount++;
+                    }
+                    if(isSelected && isAnswer){
                         answerCount++;
                     }
                 }
-                // Процент одного выбранного ответа в вопросе
-                let answerScrore = questionScrore / answerCount;
-                console.log(answerScrore)
+                correctAnswer += answerCount;
             }
-
-            for(let i = 0; i < test.questions.length; i++){
-                let answerCount = 0;
-                for(let j = 0; j < test.questions[i].answers; j++){
-                    let isSelected = passedTest[i].answers[j].isSelected;
-                    let isAnswer = test.questions[i].answers[j].isAnswer;
-
-                    //TODO: Проверить тест и записать результат
-                }
+            if(correctAnswer < 0){
+                correctAnswer = 0;
             }
-
+            console.log(`Процентов ${Math.round((100 / isAnswerCount) * correctAnswer)}`);
+            //TODO: Записать все в бд (Ответ готов)
             res.send({
                 message: "Тест отправлен"
             });
