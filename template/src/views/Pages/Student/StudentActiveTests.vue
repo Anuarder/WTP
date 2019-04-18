@@ -2,9 +2,9 @@
 	<v-content>
 		<v-container>
 			<div v-if="!loading">
-				<v-layout v-if="activeTests.length !== 0">
-					<v-flex xs12 md4>
-						<v-card class="mt-3" v-for="(test, i) in activeTests" :key="i">
+				<v-layout row wrap v-if="activeTests.length !== 0">
+					<v-flex xs12 md4 v-for="(test, i) in activeTests" :key="i">
+						<v-card class="mt-3 mr-3">
 							<v-card-title primary-title>
 								<div>
 									<h3 class="headline mb-3">
@@ -72,6 +72,7 @@ export default {
 				let response = await StudentServices.getActiveTests();
 				if (response.data.tests) {
 					this.activeTests = response.data.tests;
+					this.activeTests.reverse();
 					this.loading = false;
 				} else {
 					console.log('Get student test error');

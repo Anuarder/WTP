@@ -6,7 +6,7 @@
             <v-btn flat dark>Время {{currentTime.min}}:{{currentTime.sec}}</v-btn>
         </v-card-title>
         <v-card-text>
-            <v-carousel light hide-delimiters>
+            <v-carousel touch light hide-delimiters>
                 <v-carousel-item v-for="(question, i) in answers" :key="i">
                 <div class="ma-4">
                     <h2>{{question.question}}</h2>
