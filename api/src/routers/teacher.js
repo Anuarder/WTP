@@ -5,6 +5,7 @@ const checkAuth = require('../config/checkAuth');
 router.get('/getTeacherStudents', checkAuth, TeacherController.getTeacherStudents);
 router.get('/getTeacherTests', checkAuth, TeacherController.getTeacherTests);
 router.get('/getAllStudents', checkAuth, TeacherController.getAllStudents);
+router.get('/getStudentsResults', checkAuth, TeacherController.getStudentsResults);
 
 router.post('/createTest', checkAuth, TeacherController.createTest);
 router.post('/deleteTests', checkAuth, TeacherController.deleteTests);

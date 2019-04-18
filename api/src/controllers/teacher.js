@@ -194,10 +194,32 @@ module.exports = {
 				message: "Update student test"
 			});
 		} catch (err) {
+			console.log("\x1b[31m", err);
 			res.status(400).send({
 				error: err
 			});
+		}
+	},
+	async getStudentsResults(req, res){
+		try{
+			let teacher = await User.findOne({ _id: req.userData.id });
+			let results = [];
+			for (let item of teacher.students) {
+				let student = await User.findOne({ _id: item });
+				results.push({
+					id: student.id,
+					name: student.name,
+					testResults: student.testResults
+				});
+			}
+			res.send({
+				results: results
+			});
+		}catch(err){
 			console.log("\x1b[31m", err);
+			res.status(400).send({
+				error: err
+			});
 		}
 	}
 };
