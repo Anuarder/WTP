@@ -3,6 +3,7 @@ const Test = require("../models/Test");
 
 module.exports = {
 	async getAllStudents(req, res) {
+		// Получение всех пользователей с ролью студент
 		try {
 			let students = await User.find({ role: "student" });
 			let filterStudents = [];
@@ -25,6 +26,7 @@ module.exports = {
 		}
 	},
 	async getTeacherStudents(req, res) {
+		// Получение студентов которые есть у учителя
 		try {
 			let teacher = await User.findOne({ _id: req.userData.id });
 			let students = [];
@@ -49,6 +51,7 @@ module.exports = {
 		}
 	},
 	async addStudents(req, res) {
+		// Добавить студента к учителю
 		try {
 			for (let student of req.body.students) {
 				await User.updateOne(
@@ -68,26 +71,30 @@ module.exports = {
 		}
 	},
 	async createTest(req, res) {
+		// Создать тест
 		try {
+			// Проверку на повторение имен
 			let test = await Test.findOne({ name: req.body.name });
 			if (test) {
 				res.send({
 					error: "Тест уже создан"
 				});
 			} else {
-				let date = new Date();
+				let date = new Date(); 
 				let newTest = new Test({
-					name: req.body.name,
-					questions: req.body.questions,
-					time: req.body.time,
+					name: req.body.name, // Название теста
+					questions: req.body.questions, // Вопросы для теста
+					time: req.body.time, // Время на прохождение теста
 					results: {
-						pass: 0,
-						flooded: 0
+						pass: 0, // Прошли тест
+ 						flooded: 0 // Провалили тест
 					},
 					date: `${date.getDate()}.${date.getUTCMonth() +
-						1}.${date.getUTCFullYear()}`
+						1}.${date.getUTCFullYear()}` // Дата создания теста
 				});
+				// Сохрание теста в бд
 				let saveTest = await newTest.save();
+				// Добавление id теста к учителю
 				await User.updateOne(
 					{ _id: req.userData.id },
 					{ $addToSet: { tests: saveTest._id } }
@@ -106,17 +113,22 @@ module.exports = {
 	},
 	async deleteTests(req, res) {
 		try {
+			// Получение всех тестов переданных в запросе
 			let tests = await Test.find({ _id: { $in: req.body.tests } });
+			// Прохождение по тестам
 			for (let test of tests) {
+				// Удаление id теста у студентов
 				await User.updateMany(
 					{ _id: { $in: test.students } },
 					{ $pull: { tests: { $in: req.body.tests } } }
 				);
 			}
+			// Удаление id теста у учителя
 			await User.updateOne(
 				{ _id: req.userData.id },
 				{ $pull: { tests: { $in: req.body.tests } } }
 			);
+			// Удалить всех тесты переданных в запросе
 			await Test.deleteMany({ _id: { $in: req.body.tests } });
 
 			res.send({
@@ -130,6 +142,7 @@ module.exports = {
 		}
 	},
 	async deleteTeacherStudents(req, res) {
+		// Удалить студентов которые есть у учителя
 		try {
 			await User.updateOne(
 				{ _id: req.userData.id },
@@ -146,6 +159,7 @@ module.exports = {
 		}
 	},
 	async getTeacherTests(req, res) {
+		// Получить тесты созданные учителем
 		try {
 			let teacher = await User.findOne({ _id: req.userData.id });
 			let tests = await Test.find({ _id: { $in: teacher.tests } });
@@ -160,13 +174,16 @@ module.exports = {
 		}
 	},
 	async sendTestToStudents(req, res) {
+		// Отправить выбранные тесты, выбранным студентам
 		try {
+			// Отправить выбранные тесты
 			for (let test of req.body.tests) {
 				await User.updateMany(
 					{ _id: { $in: req.body.students } },
 					{ $addToSet: { tests: test } }
 				);
 			}
+			// Выбранным студентам
 			for (let student of req.body.students) {
 				await Test.updateMany(
 					{ _id: { $in: req.body.tests } },

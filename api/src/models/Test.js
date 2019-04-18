@@ -22,9 +22,3 @@ const testSchema = new Schema(
 );
 
 module.exports = mongoose.model("Test", testSchema);
-
-// Студент отправляет запрос для получения тестов. Запрос смотрит по группам - в каких группах есть такой студент
-// и собирает тесты которые есть в этих группах, и отправляет студенту
-
-//В questions будет 3 объекта. {question: Array, answer: Number, time: Timestamp}
-//В results {student: {name: String, id: ID}, success: Number, Error: Number}2

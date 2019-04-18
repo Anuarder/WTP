@@ -6,7 +6,7 @@ const config = require("../config/config");
 module.exports = {
 	async registerUser(req, res) {
 		try {
-			// Check email for existence
+			// Проверка на повторение email
 			let user = await User.findOne({
 				email: req.body.email
 			});
@@ -21,13 +21,14 @@ module.exports = {
 					groups: [],
 					tests: []
 				});
-				// Hash password
+
+				// Шифрование пароля
 				let salt = await bcrypt.genSalt(10);
 				let hash = await bcrypt.hash(newUser.password, salt);
 
 				newUser.password = hash;
 
-				// Save new user
+				// Регистрация пользователя
 				await newUser.save();
 
 				res.send({
@@ -42,17 +43,21 @@ module.exports = {
 	},
 	async loginUser(req, res) {
 		try {
+			// Поиск пользователя в БД
 			let user = await User.findOne({
 				email: req.body.email
 			});
+			// Проверка на существование пользователя
 			if (user) {
 				let password = await bcrypt.compare(
 					req.body.password,
 					user.password
 				);
+				// Проверка введенного пароля
 				if (!password) {
 					throw "Неверный пароль";
 				} else {
+					// Подписание токена
 					const token = jwt.sign(
 						{
 							email: user.email,
@@ -60,7 +65,7 @@ module.exports = {
 						},
 						config.secret,
 						{
-							expiresIn: "7d"
+							expiresIn: "7d" // Время жизни токена
 						}
 					);
 
@@ -70,9 +75,6 @@ module.exports = {
 							email: user.email,
 							role: user.role,
 							id: user._id,
-							tests: user.tests,
-							students: user.students,
-							testResult: user.testResult
 						},
 						token: token
 					});
@@ -87,6 +89,7 @@ module.exports = {
 		}
 	},
 	async changePassword(req, res) {
+		// Обновление пароля
 		try {
 			let salt = await bcrypt.genSalt(10);
 			let hash = await bcrypt.hash(req.body.newPassword, salt);

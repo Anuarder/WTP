@@ -19,9 +19,6 @@
     "morgan": "^1.9.1"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
-    "mocha": "^6.0.2",
-    "nodemon": "^1.18.10",
-    "supertest": "^4.0.2"
+    "nodemon": "^1.18.10"
   }
 }
