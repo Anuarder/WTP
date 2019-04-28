@@ -58,14 +58,20 @@ module.exports = {
 					let isSelected = passedTest[i].answers[j].isSelected;
 					let isAnswer = test.questions[i].answers[j].isAnswer;
 
-					// Общее кол-во ответов для вычесления 100%
+					// Общее кол-во ответов для вычисления 100%
 					if (isAnswer) {
 						isAnswerCount++;
 					}
 					// Добавление правильных отмеченных ответов
 					if (isSelected && isAnswer) {
 						answerCount++;
+					}else if(isSelected && !isAnswer){
+						// Проверка неправельный выбор
+						answerCount--;
 					}
+				} 
+				if(answerCount < 0){
+					answerCount = 0;
 				}
 				// Кол-во правильных отмеченных ответов
 				correctAnswer += answerCount;
