@@ -42,4 +42,26 @@
 .circle-checkbox:checked::after {
     content: '\f058';
 }
+
+.login-content {
+	height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url('./assets/background.jpg');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: #003179;
+}
+.auth-btn-container{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+.auth-btn-container a{
+    color: #0D47A1;
+}
 </style>

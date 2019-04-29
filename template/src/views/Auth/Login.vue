@@ -1,37 +1,43 @@
 <template>
-  <v-container class="content">
     <div class="login-content">
-      <h1 class="text-xs-center display-1 font-weight-light top-text">Login</h1>
-      <div class="login-form">
-        <v-form class="mt-3 mb-3" @submit.prevent>
-          <v-alert
-            v-model="alert"
-            outline
-            class="error-alert mb-3"
-            color="#fd5b4d"
-            dismissible
-          >{{error_message}}</v-alert>
-          <v-text-field solo placeholder="Email" v-model="user.email"></v-text-field>
-          <v-text-field
-            solo
-            :append-icon="showPassword ? 'visibility_off' : 'visibility'"
-            :type="showPassword ? 'text' : 'password'"
-            @click:append="showPassword = !showPassword"
-            placeholder="Password"
-            v-model="user.password"
-          ></v-text-field>
-          <v-btn
-            @click="login()"
-            type="submit"
-            dark
-            class="elevation-8 text-none auth-btn ml-3"
-            right
-            :loading="performingRequest"
-          >Login</v-btn>
-        </v-form>
-      </div>
+        <div>
+            <h1 class="text-xs-center display-1 font-weight-light top-text">Авторизация</h1>
+            <div class="login-form mt-5">
+                <v-form class="mt-3 mb-3" @submit.prevent>
+                    <v-alert
+                        v-model="alert"
+                        outline
+                        class="error-alert mb-3"
+                        color="#fd5b4d"
+                        dismissible
+                    >{{error_message}}</v-alert>
+                    <v-text-field solo placeholder="Email" v-model="user.email"></v-text-field>
+                    <v-text-field
+                        solo
+                        :append-icon="showPassword ? 'visibility_off' : 'visibility'"
+                        :type="showPassword ? 'text' : 'password'"
+                        @click:append="showPassword = !showPassword"
+                        placeholder="Пароль"
+                        v-model="user.password"
+                    ></v-text-field>
+                    <div class="auth-btn-container">
+                        <v-btn
+                            @click="login()"
+                            type="submit"
+                            dark
+                            class="elevation-8 text-none auth-btn ma-0"
+                            color="primary"
+                            :loading="performingRequest">
+                            Войти
+                        </v-btn>
+                        <router-link to='/register' class="mt-3 subheading">
+                            Регистрация
+                        </router-link>
+                    </div>
+                </v-form>
+            </div>
+        </div>
     </div>
-  </v-container>
 </template>
 <script>
 import Auth from '@/services/Auth';

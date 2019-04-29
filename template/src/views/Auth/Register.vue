@@ -1,78 +1,81 @@
 <template>
-  <v-content>
-    <v-container>
-      <div class="login-content">
-        <h1 class="text-xs-center display-1 font-weight-light top-text">Регистрация</h1>
-        <div class="login-form">
-          <v-form ref="registerForm" @submit.prevent v-model="valid" class="mt-3 mb-3">
-            <v-alert
-              v-model="errorAlert"
-              outline
-              class="error-alert mb-3"
-              color="#fd5b4d"
-              dismissible
-            >{{error_message}}</v-alert>
-            <v-text-field
-              solo
-              class="login-input"
-              :rules="usernameRules"
-              v-model="username"
-              required
-              label="Имя пользователя"
-            ></v-text-field>
-            <v-select
-              :items="roles"
-              label="Выберите тип"
-              solo
-              item-text="text"
-              item-value="role"
-              v-model="role"
-            ></v-select>
-            <v-text-field
-              solo
-              class="login-input"
-              label="Email"
-              v-model="email"
-              :rules="emailRules"
-              required
-              type="email"
-            ></v-text-field>
-            <v-text-field
-              solo
-              class="login-input"
-              label="Пароль"
-              :append-icon="showPassword ? 'visibility_off' : 'visibility'"
-              :type="showPassword ? 'text' : 'password'"
-              @click:append="showPassword = !showPassword"
-              v-model="password"
-              :rules="passwordRules"
-              required
-            ></v-text-field>
-            <v-text-field
-              solo
-              class="login-input"
-              label="Повторите пароль"
-              :append-icon="showPassword ? 'visibility_off' : 'visibility'"
-              :type="showPassword ? 'text' : 'password'"
-              @click:append="showPassword = !showPassword"
-              v-model="confirmPassword"
-              :rules="confirmPasswordRules"
-              required
-            ></v-text-field>
-            <v-btn
-              @click="validate()"
-              color
-              dark
-              type="submit"
-              class="elevation-8 text-none auth-btn ml-3"
-              right
-              :loading="performingRequest"
-            >Зарегистрироваться</v-btn>
-          </v-form>
+    <div class="login-content">
+        <div>
+            <h1 class="text-xs-center display-1 font-weight-light top-text">Регистрация</h1>
+            <div class="login-form mt-4">
+                <v-form ref="registerForm" @submit.prevent v-model="valid" class="mt-3 mb-3">
+                    <v-alert
+                        v-model="errorAlert"
+                        outline
+                        class="error-alert mb-3"
+                        color="#fd5b4d"
+                        dismissible
+                    >{{error_message}}</v-alert>
+                    <v-text-field
+                        solo
+                        class="login-input"
+                        :rules="usernameRules"
+                        v-model="username"
+                        required
+                        label="Имя пользователя"
+                    ></v-text-field>
+                    <v-select
+                        :items="roles"
+                        label="Выберите тип"
+                        solo
+                        item-text="text"
+                        item-value="role"
+                        v-model="role"
+                    ></v-select>
+                    <v-text-field
+                        solo
+                        class="login-input"
+                        label="Email"
+                        v-model="email"
+                        :rules="emailRules"
+                        required
+                        type="email"
+                    ></v-text-field>
+                    <v-text-field
+                        solo
+                        class="login-input"
+                        label="Пароль"
+                        :append-icon="showPassword ? 'visibility_off' : 'visibility'"
+                        :type="showPassword ? 'text' : 'password'"
+                        @click:append="showPassword = !showPassword"
+                        v-model="password"
+                        :rules="passwordRules"
+                        required
+                    ></v-text-field>
+                    <v-text-field
+                        solo
+                        class="login-input"
+                        label="Повторите пароль"
+                        :append-icon="showPassword ? 'visibility_off' : 'visibility'"
+                        :type="showPassword ? 'text' : 'password'"
+                        @click:append="showPassword = !showPassword"
+                        v-model="confirmPassword"
+                        :rules="confirmPasswordRules"
+                        required
+                    ></v-text-field>
+                    <div class="auth-btn-container">
+                        <v-btn
+                            @click="validate()"
+                            color="primary"
+                            dark
+                            type="submit"
+                            class="elevation-8 text-none auth-btn ma-0"
+                            :loading="performingRequest">
+                            Зарегистрироваться
+                        </v-btn>
+                        <router-link to='/login' class="mt-3 subheading">
+                            У вас есть аккаунт?
+                        </router-link>
+                    </div>
+                </v-form>
+            </div>
         </div>
-      </div>
-    </v-container>
-  </v-content>
+    </div>
 </template>
 <script>
 import Auth from '@/services/Auth';
@@ -101,7 +104,9 @@ export default {
 			password: '',
 			passwordRules: [
 				v => !!v || 'Обязательное поле',
-				v => (v && v.length >= 6) || 'Пароль должен быть более 6 символов',
+				v =>
+					(v && v.length >= 6) ||
+					'Пароль должен быть более 6 символов',
 			],
 			confirmPassword: '',
 			confirmPasswordRules: [

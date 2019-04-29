@@ -218,7 +218,7 @@ module.exports = {
 		}catch(err){
 			console.log("\x1b[31m", err);
 			res.status(400).send({
-				error: err
+				error: errs
 			});
 		}
 	}
